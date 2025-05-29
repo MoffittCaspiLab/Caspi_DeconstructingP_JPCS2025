@@ -1,0 +1,2175 @@
+1    DM          'LOG; CLEAR; OUT; CLEAR; ';
+2    %LET        program = C:\Users\renate\Box Sync\SENSITIVE Folder
+2  ! hlh14\Renate2015\MentalHealth45Yrs\MH45yrs_July2019.sas;
+3    FOOTNOTE    "&program on &sysdate.";
+4
+5    *********************************************************************************************
+5  ! ;
+6    *  For:             Dunedin
+7    *  Paper:           45 years of mental health
+8    *  Programmer:      Renate Houts
+9    *  FILE:            "C:\Users\renate\Box Sync\SENSITIVE Folder
+9  ! hlh14\Renate2015\MentalHealth45Yrs\MH45yrs_July2019.sas"
+10   *
+11   *  Last modified:
+12   *
+13   *********************************************************************************************
+13 ! ;
+14
+15   libname MH
+15 ! 'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\MentalHealth45Yrs\DataFiles_FromHL';
+NOTE: Libref MH was successfully assigned as follows:
+      Engine:        V9
+      Physical Name: C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\MentalHealth45Yrs\DataFiles_FromHL
+16   libname MH1
+16 ! 'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\MentalHealth45Yrs\DataFiles_FromHL\OLD';
+NOTE: Libref MH1 was successfully assigned as follows:
+      Engine:        V9
+      Physical Name:
+      C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\MentalHealth45Yrs\DataFiles_FromHL\OLD
+17   libname Attr    'C:\Users\rh93\Box\Duke_DPPPlab\P45 Incoming\Attrition';
+NOTE: Libref ATTR was successfully assigned as follows:
+      Engine:        V9
+      Physical Name: C:\Users\rh93\Box\Duke_DPPPlab\P45 Incoming\Attrition
+18   libname P       'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2018_LittleP_Expanded\Data';
+NOTE: Libref P was successfully assigned as follows:
+      Engine:        V9
+      Physical Name: C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2018_LittleP_Expanded\Data
+19
+20   proc format;
+21       value INSLT5XC
+22            1 = 'probable'
+23            2 = 'severe' ;
+NOTE: Format INSLT5XC has been output.
+24       value SEX
+25            1 = 'female'
+26            2 = 'male' ;
+NOTE: Format SEX has been output.
+27       value HEIGHT38F
+28           -9 = 'Missing'
+29           -1 = 'Not seen' ;
+NOTE: Format HEIGHT38F has been output.
+30       value WEIGHT38F
+31           -9 = 'Missing'
+32           -8 = 'Pregnant'
+33           -1 = 'Not seen' ;
+NOTE: Format WEIGHT38F has been output.
+34       value TOTKIDS
+35           -9 = 'not seen at 38' ;
+NOTE: Format TOTKIDS has been output.
+36       value $SEEN38CD
+37           'D' = 'Deceased'
+38           'M' = 'Missing'
+39           'R' = 'Refused previously'
+40           'S' = 'Seen'
+41           'SD' = 'Seen, subsequently died'
+42           'SF' = 'Field, Full'
+43           'SJ' = 'seen in Jail & at Unit'
+44           'NS' = 'Not seen'
+45           'R38' = 'Refused at 38'
+46           'SFD' = 'Seen field, died later'
+47           'SFH' = 'Field, intellectual handicap'
+48           'SRQ' = 'Self-report Q'
+49           'SFS' = 'Field, short' ;
+NOTE: Format $SEEN38CD has been output.
+50       value SEENP38F
+51           1 = 'seen at Unit'
+52           2 = 'Field full'
+53           3 = 'Questionnaire'
+54           4 = 'IHC'
+55           5 = 'prison'
+56           6 = 'Field, short'
+57           8 = 'Dead'
+58           9 = 'Not seen' ;
+NOTE: Format SEENP38F has been output.
+59       value BENEFIT
+60           1 = 'Consent given + found'
+61           2 = 'Consent given but not found'
+62           3 = 'Consent not given' ;
+NOTE: Format BENEFIT has been output.
+63       value ACC_STAT
+64           1 = 'Consent given + found'
+65           2 = 'Consent given but not found'
+66           3 = 'Consent not given' ;
+NOTE: Format ACC_STAT has been output.
+67       value CREDIT_S
+68           1 = 'consented & found'
+69           2 = 'not found/no credit score'
+70           3 = 'refused consent' ;
+NOTE: Format CREDIT_S has been output.
+71       value BLOODSTA
+72           1 = 'blood drawn'
+73           9 = 'declined/field' ;
+NOTE: Format BLOODSTA has been output.
+74       value CONVSEAR
+75           0 = 'not seen at 38'
+76           1 = 'search assumed'
+77           38 = 'search record found'
+78           88 = 'deceased'
+79           99 = 'refused' ;
+NOTE: Format CONVSEAR has been output.
+80       value NOYES
+81           0 = 'no disorder'
+82           1 = 'had disorder';
+NOTE: Format NOYES has been output.
+83       value ANOREX
+84           0 = 'No anorx Dx'
+85           1 = 'Anorexia Dx';
+NOTE: Format ANOREX has been output.
+86       value BULLIM
+87           0 = 'No bullimia Dx'
+88           1 = 'Bullimia Dx';
+NOTE: Format BULLIM has been output.
+89       value ADD
+90           0 = 'No ADD Dx'
+91           1 = 'ADD Dx';
+NOTE: Format ADD has been output.
+92       value DX
+93           1 = 'Dx';
+NOTE: Format DX has been output.
+94       value NODX
+95           0 = 'No Dx'
+96           1 = 'Dx present';
+NOTE: Format NODX has been output.
+97       value DXMISS
+98           1 = 'Dx'
+99           9 = 'Missing';
+NOTE: Format DXMISS has been output.
+100      value DXANX
+101          1 = 'Dx'
+102          2 = 'crit a,b,c met & on pill';
+NOTE: Format DXANX has been output.
+103      value DXDRG
+104          0 = 'no dx'
+105          1 = 'drug dep';
+NOTE: Format DXDRG has been output.
+106      value DXTOB
+107          1 = 'tob dx';
+NOTE: Format DXTOB has been output.
+108      value DXNOCOMP
+109          1 = 'Dx'
+110          9 = 'did not complete';
+NOTE: Format DXNOCOMP has been output.
+111      value DXTIME
+112          1 = 'Dx'
+113          9 = 'out of time';
+NOTE: Format DXTIME has been output.
+114      value NOCOMP
+115          9 = 'did not complete';
+NOTE: Format NOCOMP has been output.
+116      value OOT
+117          99 = 'out of time';
+NOTE: Format OOT has been output.
+118      value INTVR
+119          1 = 'Richie'
+120          2 = 'Sandhya'
+121          3 = 'Sean'
+122          4 = 'Liz G'
+123          5 = 'Elena'
+124          6 = 'Liz B'
+125          7 = 'Danielle'
+126          8 = 'Charmaine'
+127          9 = 'Lynda'
+128          10 = 'Kate'
+129          11 = 'Kirsten'
+130          12 = 'Barbara'
+131          13 = 'Jason'
+132          14 = 'Nikki'
+133          15 = 'Ness'
+134          16 = 'Denise'
+135          17 = 'Melissa'
+136          18 = 'Fiona'
+137          19 = 'Dave'
+138          20 = 'Hanne'
+139          21 = 'Jane';
+NOTE: Format INTVR has been output.
+140      value DXB
+141           0 = 'Deceased'
+142           1 = 'Thd+Int+Ext'
+143           2 = 'Thd+Int'
+144           3 = 'Thd+Ext'
+145           4 = 'Int+Ext'
+146           5 = 'Thd'
+147           6 = 'Int'
+148           7 = 'Ext'
+149           8 = 'Remitted'
+150           9 = 'Never'
+151          10 = 'Missing';
+NOTE: Format DXB has been output.
+152      value DXTY
+153           0 = 'Never'
+154           1 = 'Remitted'
+155           2 = 'Ext'
+156           3 = 'Int'
+157           4 = 'Thd'
+158           5 = 'Int+Ext'
+159           6 = 'Thd+Ext'
+160           7 = 'Thd+Int'
+161           8 = 'Thd+Int+Ext'
+162           9 = 'Missing'
+163          10 = 'Deceased';
+NOTE: Format DXTY has been output.
+164  run;
+
+NOTE: PROCEDURE FORMAT used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.03 seconds
+
+
+165
+166  data MH;
+167      merge   MH.Childhood_to38_May2019 (drop = BioAgeKD38 PaceOfAging WFSIQ38 wfsiq38STD
+167! ZCHBR3 inslt5xc RetroACEs_trunc ProACEs_trunc SESchildhd
+168                                                sesHi38 sesHiHmk38 ParetoTotHi ParetoHi0to3
+168! infMem38Oct infAtt38Oct hrsearch NHS_antipsychotic38 NHS_antidep38
+169                                                NHS_anxiolytic38 NHS_adhd38 NHS_AlcDrugTx38
+169! NHS_SmkCess38 NHSany_wsmk NHSany_nosmk ChildhdIQ)
+170              MH.AllDx45_18June2019 (drop = CogDiffSc45 CogDiffSc45expd Any6anx45d5)
+171              MH.Phenotypes_June2019 (drop = vci45a pri45a wmi45a psi45a)
+172              Attr.Seen45wScan
+173              P.Pfactor_June2019
+174              MH1.AllDx45_10Aug (keep = snum status15 status18 status21 status26 status32
+174! status38 deaths2018 AgeatDeath2018);
+175      by snum;
+176
+177      * Consistently name vars across ages (avoid problems with var name changes in the future)
+177! ;
+178      adhd15 = addliftm; adhd18 = dxadd18;
+178!            adhd38 = dxadhd38;    adhd45 = dxadhd45d5;
+179      cd15   = cd1115;   cd18   = dxCD_18;   cd21   = dxCD_21;    cd26   = dxCD_26;   cd32   =
+179! dxCD_32;   cd38   = dxCD_38;     cd45   = dxCD_45T;
+180                         alc18  = dxALC18u;  alc21  = dxAL21d4;   alc26  = dxal26d4;  alc32  =
+180! dxal32d4;  alc38  = dxAL38d4;    alc45  = dxAL45D4;
+181                         tob18  = dxtob18;   tob21  = dxtob21;    tob26  = dxtob26;   tob32  =
+181! dxtob32;   tob38  = dxTob38Dsm4; tob45  = dxTob45dsm4;
+182                         mar18  = dxMAR18u;  mar21  = dxMAR21;    mar26  = dxmar26;   mar32  =
+182! dxmar32;   mar38  = dxmar38;     mar45  = dxmar45;
+183                                                                  drg26  = dxdrug26;  drg32  =
+183! dxdrg32m;  drg38  = dxdrg38m;    drg45  = dxdrg45m;
+184      anx15 = anx1115;   gad18  = dxGAD18u;  gad21  = dxgad21;    gad26  = dxgad26;   gad32  =
+184! dxgad32;   gad38  = dxgad38;     gad45  = dxgad45;
+185                         pad18  = dxPAD18u;  pad21  = dxpad21;    pad26  = dxpad26;   pad32  =
+185! dxpad32;   pad38  = dxpad38;     pad45  = dxpad45;
+186                         agph18 = dxAGPH18u; agph21 = dxagph21;   agph26 = dx2ag26;   agph32 =
+186! dxagph32;  agph38 = dxagph38;    agph45 = dxagph45d5;
+187                         sop18  = dxSOP18u;  sop21  = dxsop21;    sop26  = dxsop26;   sop32  =
+187! dxsop32;   sop38  = dxsop38;     sop45  = dxsop45d5;
+188                         sip18  = dxSIP18u;  sip21  = dxsip21;    sip26  = dxsip26;   sip32  =
+188! dxsip32;   sip38  = dxsip38;     sip45  = dxsip45d5;
+189      dep15 = dep1115;   mde18  = dxMDE18u;  mde21  = dxmde21;    mde26  = dxmde26;   mde32  =
+189! dxmde32;   mde38  = dxmde38;     mde45  = dxmde45;
+190                                                                  ptsd26 = dxptsd26;  ptsd32 =
+190! dxptsd32;  ptsd38 = dxptsd38;    ptsd45 = dxptsd45d5;
+191                         anr18  = dxanrx18;  anr21  = dxanrx21;   anr26  = dxanrx26;
+192                         bul18  = dxbul18;   bul21  = dxbul21;    bul26  = dxbul26;
+193                         ocd18  = dxOBCM18u; ocd21  = dxobcm21;   ocd26  = dxobcm26;   ocd32 =
+193! dxobcm32;   ocd38 = dxobcm38;    ocd45 = dxocd45d5;
+194                                             man21  = dxmania_21; man26  = dxmania_26; man32 =
+194! dxMania_32; man38 = dxmania_38;  man45 = DxMania45;
+195                                             scz21  = dxSchiz_21; scz26  = dxSchiz_26; scz32 =
+195! dxSchiz_32; scz38 = dxSchiz_38;  scz45 = dxschiz45;
+196
+197      * Recode 2 into 1 for Anorexia @ 26;
+198      if anr26 = 2 then anr26 = 1;
+199
+200      * Create dead/alive;
+201      array st[6] status15 status18 status21 status26 status32 status38;
+202      array dd[6] dead15   dead18   dead21   dead26   dead32   dead38;
+203      do i = 1 to 6;
+204          dd[i]    = 0;
+205          if st[i] = 8 then dd[i] = 1;
+206      end;
+207      dead45 = 0;
+208      if AgeatDeath2018 ne 88 then dead45 = 1;
+209      if snum = 516 then dead45 = 0;                          * Died after being seen for P45;
+210
+211      drop
+212          i oanx1115 sep1115 mde1115 phob1115 dxdys21
+213          addliftm dxadd18                                     dxadhd38    dxadhd45d5
+214          cd1115   dxCD_18    dxCD_21    dxCD_26    dxCD_32    dxCD_38     dxCD_45T
+215                   dxALC18u   dxAL21d4   dxal26d4   dxal32d4   dxAL38d4    dxAL45D4
+216                   dxtob18    dxtob21    dxtob26    dxtob32    dxTob38Dsm4 dxTob45dsm4
+217                   dxMAR18u   dxMAR21    dxmar26    dxmar32    dxmar38     dxmar45
+218                                         dxdrug26   dxdrg32m   dxdrg38m    dxdrg45m
+219          anx1115  dxGAD18u   dxgad21    dxgad26    dxgad32    dxgad38     dxgad45
+220                   dxPAD18u   dxpad21    dxpad26    dxpad32    dxpad38     dxpad45
+221                   dxAGPH18u  dxagph21   dx2ag26    dxagph32   dxagph38    dxagph45d5
+222                   dxSOP18u   dxsop21    dxsop26    dxsop32    dxsop38     dxsop45d5
+223                   dxSIP18u   dxsip21    dxsip26    dxsip32    dxsip38     dxsip45d5
+224          dep1115  dxMDE18u   dxmde21    dxmde26    dxmde32    dxmde38     dxmde45
+225                                         dxptsd26   dxptsd32   dxptsd38    dxptsd45d5
+226                   dxanrx18   dxanrx21   dxanrx26
+227                   dxbul18    dxbul21    dxbul26
+228                   dxOBCM18u  dxobcm21   dxobcm26   dxobcm32   dxobcm38    dxocd45d5
+229                              dxmania_21 dxmania_26 dxMania_32 dxmania_38  dxmania45
+230                              dxSchiz_21 dxSchiz_26 dxSchiz_32 dxSchiz_38  dxSchiz45
+231          status15 status18   status21   status26   status32   status38
+232
+233          EverAttSuic38 cd21dsm4 cd26dsm4 CogDiffSc38 MHRXCT2038 NewPsyHos2038 NHS_EvPsyHsp38
+234
+235          Seen45t Codemeaning Seen45 SeenNot45 IntDate45 ScanDate Scanned45 EXT_BF45 INT_BF45
+236          EXT_CF45 INT_CF45 THD_CF45 deaths2018;
+237
+238  run;
+
+WARNING: Multiple lengths were specified for the BY variable snum by input data sets. This might
+         cause unexpected results.
+NOTE: There were 1037 observations read from the data set MH.CHILDHOOD_TO38_MAY2019.
+NOTE: There were 1037 observations read from the data set MH.ALLDX45_18JUNE2019.
+NOTE: There were 1037 observations read from the data set MH.PHENOTYPES_JUNE2019.
+NOTE: There were 1037 observations read from the data set ATTR.SEEN45WSCAN.
+NOTE: There were 1000 observations read from the data set P.PFACTOR_JUNE2019.
+NOTE: There were 1037 observations read from the data set MH1.ALLDX45_10AUG.
+NOTE: The data set WORK.MH has 1037 observations and 114 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.03 seconds
+
+
+239
+240  proc contents data = MH varnum; run;
+NOTE: Writing HTML Body file: sashtml.htm
+
+NOTE: PROCEDURE CONTENTS used (Total process time):
+      real time           0.49 seconds
+      cpu time            0.20 seconds
+
+
+241
+242  * Check that all are coded 0/1;
+243  proc freq data = MH;
+244      table anx15  gad18  gad21  gad26  gad32  gad38  gad45;
+245      table dep15  mde18  mde21  mde26  mde32  mde38  mde45;
+246      table        pad18  pad21  pad26  pad32  pad38  pad45;
+247      table        agph18 agph21 agph26 agph32 agph38 agph45;
+248      table        sop18  sop21  sop26  sop32  sop38  sop45;
+249      table        sip18  sip21  sip26  sip32  sip38  sip45;
+250      table        anr18  anr21  anr26;
+251      table        bul18  bul21  bul26;
+252      table                      ptsd26 ptsd32 ptsd38 ptsd45;
+253
+254      table adhd15 adhd18                      adhd38 adhd45;
+255      table cd15   cd18   cd21   cd26   cd32   cd38   cd45;
+256      table        alc18  alc21  alc26  alc32  alc38  alc45;
+257      table        tob18  tob21  tob26  tob32  tob38  tob45;
+258      table        mar18  mar21  mar26  mar32  mar38  mar45;
+259      table                      drg26  drg32  drg38  drg45;
+260
+261      table        ocd18  ocd21  ocd26  ocd32  ocd38  ocd45;
+262      table               man21  man26  man32  man38  man45;
+263      table               scz21  scz26  scz32  scz38  scz45;
+264
+265      table dead15 dead18 dead21 dead26 dead32 dead38 dead45;
+266
+267  run;
+
+NOTE: There were 1037 observations read from the data set WORK.MH.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.12 seconds
+      cpu time            0.06 seconds
+
+
+268
+269  data MH_1;
+270      set MH;
+271      by snum;
+272
+273      null = .;
+274
+275      * Arrays of dx across phases;
+276      array dead[7] dead15 dead18 dead21 dead26 dead32 dead38 dead45;
+277
+278      array gad [7] anx15  gad18  gad21  gad26  gad32  gad38  gad45;
+279      array mde [7] dep15  mde18  mde21  mde26  mde32  mde38  mde45;
+280      array pad [7] null   pad18  pad21  pad26  pad32  pad38  pad45;
+281      array agph[7] null   agph18 agph21 agph26 agph32 agph38 agph45;
+282      array sop [7] null   sop18  sop21  sop26  sop32  sop38  sop45;
+283      array sip [7] null   sip18  sip21  sip26  sip32  sip38  sip45;
+284      array anr [7] null   anr18  anr21  anr26  null   null   null;
+285      array bul [7] null   bul18  bul21  bul26  null   null   null;
+286      array ptsd[7] null   null   null   ptsd26 ptsd32 ptsd38 ptsd45;
+287
+288      array adhd[7] adhd15 adhd18 null   null   null   adhd38 adhd45;
+289      array cd  [7] cd15   cd18   cd21   cd26   cd32   cd38   cd45;
+290      array alc [7] null   alc18  alc21  alc26  alc32  alc38  alc45;
+291      array tob [7] null   tob18  tob21  tob26  tob32  tob38  tob45;
+292      array mar [7] null   mar18  mar21  mar26  mar32  mar38  mar45;
+293      array drg [7] null   null   null   drg26  drg32  drg38  drg45;
+294
+295      array ocd [7] null   ocd18  ocd21  ocd26  ocd32  ocd38  ocd45;
+296      array man [7] null   null   man21  man26  man32  man38  man45;
+297      array scz [7] null   null   scz21  scz26  scz32  scz38  scz45;
+298
+299      * Created variables;
+300      array fear[7] null      fear18    fear21    fear26    fear32    fear38    fear45;
+301      array eat [7] null      eat18     eat21     eat26     null      null      null;
+302      array aanx[7] null      anyanx18  anyanx21  anyanx26  anyanx32  anyanx38 anyanx45;
+303
+304      array aint[7] anyint15  anyint18  anyint21  anyint26  anyint32  anyint38  anyint45;
+305      array intn[7] Nint15    Nint18    Nint21    Nint26    Nint32    Nint38    Nint45;
+306
+307      array aext[7] anyext15  anyext18  anyext21  anyext26  anyext32  anyext38  anyext45;
+308      array extn[7] Next15    Next18    Next21    Next26    Next32    Next38    Next45;
+309
+310      array athd[7] anythd15  anythd18  anythd21  anythd26  anythd32  anythd38  anythd45;
+311      array thdn[7] Nthd15    Nthd18    Nthd21    Nthd26    Nthd32    Nthd38    Nthd45;
+312
+313      array adx [7] anydx15   anydx18   anydx21   anydx26   anydx32   anydx38   anydx45;
+314      array dxn [7] Ndx15     Ndx18     Ndx21     Ndx26     Ndx32     Ndx38     Ndx45;
+315      array dxty[7] dxtype15  dxtype18  dxtype21  dxtype26  dxtype32  dxtype38  dxtype45;
+316      array dxtp[7] dxtype15a dxtype18a dxtype21a dxtype26a dxtype32a dxtype38a dxtype45a;
+317
+318      * Arrays of phases across dx;
+319      array ph15a [18] anx15    dep15    null      null     null      adhd15    cd15    null
+319!   null     null     null     null     null     null
+320                       anyint15 anyext15 anythd15  anydx15;
+321      array ph18a [18] gad18    mde18    fear18    eat18    null      adhd18    cd18    alc18
+321!   tob18    mar18    null     ocd18    null     null
+322                       anyint18 anyext18 anythd18  anydx18;
+323      array ph21a [18] gad21    mde21    fear21    eat21    null      null      cd21    alc21
+323!   tob21    mar21    null     ocd21    man21    scz21
+324                       anyint21 anyext21 anythd21  anydx21;
+325      array ph26a [18] gad26    mde26    fear26    eat26    ptsd26    null      cd26    alc26
+325!   tob26    mar26    drg26    ocd26    man26    scz26
+326                       anyint26 anyext26 anythd26  anydx26;
+327      array ph32a [18] gad32    mde32    fear32    null     ptsd32    null      cd32    alc32
+327!   tob32    mar32    drg32    ocd32    man32    scz32
+328                       anyint32 anyext32 anythd32  anydx32;
+329      array ph38a [18] gad38    mde38    fear38    null     ptsd38    adhd38    cd38    alc38
+329!   tob38    mar38    drg38    ocd38    man38    scz38
+330                       anyint38 anyext38 anythd38  anydx38;
+331      array ph45a [18] gad45    mde45    fear45    null     ptsd45    adhd45    cd45    alc45
+331!   tob45    mar45    drg45    ocd45    man45    scz45
+332                       anyint45 anyext45 anythd45  anydx45;
+333      array ph_any[18] anygad   anymde   anyfear   anyeat   anyptsd   anyadhd   anycd   anyalc
+333!   anytob   anymar   anydrg   anyocd   anyman   anyscz
+334                       anyint   anyext   anythd    anydx;
+335      array ph_ph [18] Ngad     Nmde     Nfear     Neat     Nptsd     Nadhd     Ncd     Nalc
+335!   Ntob     Nmar     Ndrg     Nocd     Nman     Nscz
+336                       NPhint   NPhext   NPhthd    NPhdx;
+337
+338      array ph_ag1[18] gadph1     mdeph1     fearph1     eatph1     ptsdph1     adhdph1
+338! cdph1     alcph1     tobph1     marph1     drgph1     ocdph1     manph1     sczph1
+339                       intph1     extph1     thdph1      dxph1;
+340      array ph_ag2[18] gadph2     mdeph2     fearph2     eatph2     ptsdph2     adhdph2
+340! cdph2     alcph2     tobph2     marph2     drgph2     ocdph2     manph2     sczph2
+341                       intph2     extph2     thdph2      dxph2;
+342      array ph_lag[18] gadlag     mdelag     fearlag     eatlag     ptsdlag     adhdlag
+342! cdlag     alclag     toblag     marlag     drglag     ocdlag     manlag     sczlag
+343                       intlag     extlag     thdlag      dxlag;
+344      array ph15f [18] firstanx15 firstdep15 firstfear15 firsteat15 firstptsd15 firstadhd15
+344! firstcd15 firstalc15 firsttob15 firstmar15 firstdrg15 firstocd15 firstman15 firstscz15
+345                       firstint15 firstext15 firstthd15  firstdx15;
+346      array ph18f [18] firstgad18 firstmde18 firstfear18 firsteat18 firstptsd18 firstadhd18
+346! firstcd18 firstalc18 firsttob18 firstmar18 firstdrg18 firstocd18 firstman18 firstscz18
+347                       firstint18 firstext18 firstthd18  firstdx18;
+348      array ph21f [18] firstgad21 firstmde21 firstfear21 firsteat21 firstptsd21 firstadhd21
+348! firstcd21 firstalc21 firsttob21 firstmar21 firstdrg21 firstocd21 firstman21 firstscz21
+349                       firstint21 firstext21 firstthd21  firstdx21;
+350      array ph26f [18] firstgad26 firstmde26 firstfear26 firsteat26 firstptsd26 firstadhd26
+350! firstcd26 firstalc26 firsttob26 firstmar26 firstdrg26 firstocd26 firstman26 firstscz26
+351                       firstint26 firstext26 firstthd26  firstdx26;
+352      array ph32f [18] firstgad32 firstmde32 firstfear32 firsteat32 firstptsd32 firstadhd32
+352! firstcd32 firstalc32 firsttob32 firstmar32 firstdrg32 firstocd32 firstman32 firstscz32
+353                       firstint32 firstext32 firstthd32  firstdx32;
+354      array ph38f [18] firstgad38 firstmde38 firstfear38 firsteat38 firstptsd38 firstadhd38
+354! firstcd38 firstalc38 firsttob38 firstmar38 firstdrg38 firstocd38 firstman38 firstscz38
+355                       firstint38 firstext38 firstthd38  firstdx38;
+356      array ph45f [18] firstgad45 firstmde45 firstfear45 firsteat45 firstptsd45 firstadhd45
+356! firstcd45 firstalc45 firsttob45 firstmar45 firstdrg45 firstocd45 firstman45 firstscz45
+357                       firstint45 firstext45 firstthd45  firstdx45;
+358
+359      do i = 1 to 7;
+360          * Collapse fears (Panic, agoraphobia, social, simple);
+361          if i > 1 and SUM(pad[i], agph[i], sop[i], sip[i])        > 0 then fear[i] = 1;
+362              else if i > 1 and N(pad[i], agph[i], sop[i], sip[i]) > 0 then fear[i] = 0;
+363          * Collapse eating disorders (anorexia/bulimia);
+364          if i in (2, 3, 4) and SUM(anr[i], bul[i])        > 0 then eat[i] = 1;
+365              else if i in (2, 3, 4) and N(anr[i], bul[i]) > 0 then eat[i] = 0;
+366
+367          * Any anxiety (GAD + Fears);
+368          if i > 1 and SUM(gad[i], fear[i]) > 0 then aanx[i] = 1;
+369              else if i > 1 and N(gad[i], fear[i]) > 0 then aanx[i] = 0;
+370
+371          * Internalizing;
+372          if SUM(gad[i], mde[i], fear[i], eat[i], ptsd[i])        > 0 then aint[i] = 1;
+373              else if N(gad[i], mde[i], fear[i], eat[i], ptsd[i]) > 0 then aint[i] = 0;
+374
+375          intn[i] = SUM(gad[i], mde[i], fear[i], eat[i], ptsd[i]);
+376          if N(gad[i], mde[i], fear[i], eat[i], ptsd[i]) = 0 then intn[i] = .;
+377
+378          * Externalizing;
+379          if SUM(adhd[i], cd[i], alc[i], tob[i], mar[i], drg[i])        > 0 then aext[i] = 1;
+380              else if N(adhd[i], cd[i], alc[i], tob[i], mar[i], drg[i]) > 0 then aext[i] = 0;
+381
+382          extn[i] = SUM(adhd[i], cd[i], alc[i], tob[i], mar[i], drg[i]);
+383          if N(adhd[i], cd[i], alc[i], tob[i], mar[i], drg[i]) = 0 then extn[i] = .;
+384
+385          * Thought Disorder;
+386          if SUM(ocd[i], man[i], scz[i])        > 0 then athd[i] = 1;
+387              else if N(ocd[i], man[i], scz[i]) > 0 then athd[i] = 0;
+388
+389          thdn[i] = SUM(ocd[i], man[i], scz[i]);
+390          if N(ocd[i], man[i], scz[i]) = 0 then thdn[i] = .;
+391
+392          * Any dx;
+393          if SUM(aint[i], aext[i], athd[i])        > 0 then adx[i] = 1;
+394              else if N(aint[i], aext[i], athd[i]) > 0 then adx[i] = 0;
+395
+396          dxn[i] = SUM(intn[i], extn[i], thdn[i]);
+397          if N(intn[i], extn[i], thdn[i]) = 0 then dxn[i] = .;
+398
+399          * Dx Type for Sankey Chart;
+400          if dead[i] = 1                            then dxty[i] = 0;     * Deceased;
+401              else if athd[i] =  1                  then dxty[i] = 1;     * Any thought
+401! disorder;
+402              else if aint[i] =  1 and aext[i] NE 1 then dxty[i] = 2;     * Internalizing only;
+403              else if aint[i] =  1 and aext[i] =  1 then dxty[i] = 3;     * Internalizing &
+403! Externalizing;
+404              else if aint[i] NE 1 and aext[i] =  1 then dxty[i] = 4;     * Externalizing only;
+405              else if adx[i]  =  0                  then dxty[i] = 5;     * No DX;
+406              else if dxty[i] = .                   then dxty[i] = 6;     * Missing;
+407
+408          * Expanded Dx Type for Sankey Chart;
+409          if dead[i] = 1                                             then dxtp[i] =  0;   *
+409! Deceased;
+410              else if athd[i] =  1 and aint[i] =  1 and aext[i] =  1 then dxtp[i] =  1;   *
+410! Thought disorder w/ INT & EXT;
+411              else if athd[i] =  1 and aint[i] =  1 and aext[i] NE 1 then dxtp[i] =  2;   *
+411! Thought disorder w/ INT;
+412              else if athd[i] =  1 and aint[i] NE 1 and aext[i] =  1 then dxtp[i] =  3;   *
+412! Thought disorder w/ EXT;
+413              else if athd[i] NE 1 and aint[i] =  1 and aext[i] =  1 then dxtp[i] =  4;   *
+413! Internalizing & Externalizing;
+414              else if athd[i] =  1 and aint[i] NE 1 and aext[i] NE 1 then dxtp[i] =  5;   *
+414! Thought disorder only;
+415              else if athd[i] NE 1 and aint[i] =  1 and aext[i] NE 1 then dxtp[i] =  6;   *
+415! Internalizing only;
+416              else if athd[i] NE 1 and aint[i] NE 1 and aext[i] =  1 then dxtp[i] =  7;   *
+416! Externalizing only;
+417              else if adx[i]  =  0                                   then dxtp[i] =  9;   * No
+417! DX;
+418              else if dxtp[i] = .                                    then dxtp[i] = 10;   *
+418! Missing;
+419
+420          if dxtp[i] = 9 and i > 1 then do;
+421              if adx[i - 1] = 1 or dxtp[i - 1] = 8 then dxtp[i] = 8;  * Remitted DX;
+422          end;
+423      end;
+424
+425      * "Fix" 2 SM's who died < 15, but have data from 12;
+426      if dxtype15 = 0 and anyint15 = 1 and anyext15 = 0 then dxtype15 = 2;
+427      if dxtype15 = 0 and anyint15 = 0 and anyext15 = 0 then dxtype15 = 5;
+428
+429      if dxtype15a = 0 and anyint15 = 1 and anyext15 = 0 then dxtype15a = 6;
+430      if dxtype15a = 0 and anyint15 = 0 and anyext15 = 0 then dxtype15a = 9;
+431
+432      do i = 1 to 18;
+433
+434          * Create "Any" vars, collapsed across phases;
+435          if SUM(ph15a[i], ph18a[i], ph21a[i], ph26a[i], ph32a[i], ph38a[i], ph45a[i])        >
+435!  0 then ph_any[i] = 1;
+436              else if N(ph15a[i], ph18a[i], ph21a[i], ph26a[i], ph32a[i], ph38a[i], ph45a[i]) >
+436!  0 then ph_any[i] = 0;
+437
+438          * Create "Sum" vars, collapsed across phases;
+439          ph_ph[i] = SUM(ph15a[i], ph18a[i], ph21a[i], ph26a[i], ph32a[i], ph38a[i], ph45a[i]);
+440
+441          if 1 <= i >= 14 and N(ph15a[i], ph18a[i], ph21a[i], ph26a[i], ph32a[i], ph38a[i],
+441! ph45a[i]) = 0 then ph_ph[i] = .;
+442              else if i > 14 and ph_any[i] = 0 and N(ph15a[i], ph18a[i], ph21a[i], ph26a[i],
+442! ph32a[i], ph38a[i], ph45a[i]) = 0 then ph_ph[i] = .;
+443
+444          * Find first dx age;
+445          if ph_any[i] ne . then do;
+446              if ph15a[i] = 1 then ph_ag1[i] = 1;
+447                  else if ph_ag1[i] = . and ph18a[i] = 1 then ph_ag1[i] = 2;
+448                  else if ph_ag1[i] = . and ph21a[i] = 1 then ph_ag1[i] = 3;
+449                  else if ph_ag1[i] = . and ph26a[i] = 1 then ph_ag1[i] = 4;
+450                  else if ph_ag1[i] = . and ph32a[i] = 1 then ph_ag1[i] = 5;
+451                  else if ph_ag1[i] = . and ph38a[i] = 1 then ph_ag1[i] = 6;
+452                  else if ph_ag1[i] = . and ph45a[i] = 1 then ph_ag1[i] = 7;
+453
+454              if ph_ag1[i] = 1 then do;
+455                  ph15f[i] = 1; ph18f[i] = 0; ph21f[i] = 0; ph26f[i] = 0; ph32f[i] = 0;
+455! ph38f[i] = 0; ph45f[i] = 0;
+456              end;
+457              if ph_ag1[i] = 2 then do;
+458                  ph15f[i] = 0; ph18f[i] = 1; ph21f[i] = 0; ph26f[i] = 0; ph32f[i] = 0;
+458! ph38f[i] = 0; ph45f[i] = 0;
+459              end;
+460              if ph_ag1[i] = 3 then do;
+461                  ph15f[i] = 0; ph18f[i] = 0; ph21f[i] = 1; ph26f[i] = 0; ph32f[i] = 0;
+461! ph38f[i] = 0; ph45f[i] = 0;
+462              end;
+463              if ph_ag1[i] = 4 then do;
+464                  ph15f[i] = 0; ph18f[i] = 0; ph21f[i] = 0; ph26f[i] = 1; ph32f[i] = 0;
+464! ph38f[i] = 0; ph45f[i] = 0;
+465              end;
+466              if ph_ag1[i] = 5 then do;
+467                  ph15f[i] = 0; ph18f[i] = 0; ph21f[i] = 0; ph26f[i] = 0; ph32f[i] = 1;
+467! ph38f[i] = 0; ph45f[i] = 0;
+468              end;
+469              if ph_ag1[i] = 6 then do;
+470                  ph15f[i] = 0; ph18f[i] = 0; ph21f[i] = 0; ph26f[i] = 0; ph32f[i] = 0;
+470! ph38f[i] = 1; ph45f[i] = 0;
+471              end;
+472              if ph_ag1[i] = 7 then do;
+473                  ph15f[i] = 0; ph18f[i] = 0; ph21f[i] = 0; ph26f[i] = 0; ph32f[i] = 0;
+473! ph38f[i] = 1; ph45f[i] = 0;
+474              end;
+475              if ph_any[i] = 0 then do;
+476                  ph_ag1[i] = 0;
+477                  ph15f[i]  = 0;
+478                  ph18f[i]  = 0;
+479                  ph21f[i]  = 0;
+480                  ph26f[i]  = 0;
+481                  ph32f[i]  = 0;
+482                  ph38f[i]  = 0;
+483                  ph45f[i]  = 0;
+484              end;
+485          end;
+486
+487          * Determine lag from one dx to the next;
+488          if ph_ag1[i] = 1 then do;
+489              if ph18a[i] = 1 then ph_ag2[i] = 2;
+490                  else if ph_ag2[i] = . and ph21a[i] = 1 then ph_ag2[i] = 3;
+491                  else if ph_ag2[i] = . and ph26a[i] = 1 then ph_ag2[i] = 4;
+492                  else if ph_ag2[i] = . and ph32a[i] = 1 then ph_ag2[i] = 5;
+493                  else if ph_ag2[i] = . and ph38a[i] = 1 then ph_ag2[i] = 6;
+494                  else if ph_ag2[i] = . and ph45a[i] = 1 then ph_ag2[i] = 7;
+495          end;
+496          else if ph_ag1[i] = 2 then do;
+497              if ph21a[i] = 1 then ph_ag2[i] = 3;
+498                  else if ph_ag2[i] = . and ph26a[i] = 1 then ph_ag2[i] = 4;
+499                  else if ph_ag2[i] = . and ph32a[i] = 1 then ph_ag2[i] = 5;
+500                  else if ph_ag2[i] = . and ph38a[i] = 1 then ph_ag2[i] = 6;
+501                  else if ph_ag2[i] = . and ph45a[i] = 1 then ph_ag2[i] = 7;
+502          end;
+503          else if ph_ag1[i] = 3 then do;
+504              if ph26a[i] = 1 then ph_ag2[i] = 4;
+505                  else if ph_ag2[i] = . and ph32a[i] = 1 then ph_ag2[i] = 5;
+506                  else if ph_ag2[i] = . and ph38a[i] = 1 then ph_ag2[i] = 6;
+507                  else if ph_ag2[i] = . and ph45a[i] = 1 then ph_ag2[i] = 7;
+508          end;
+509          else if ph_ag1[i] = 4 then do;
+510              if ph32a[i] = 1 then ph_ag2[i] = 5;
+511                  else if ph_ag2[i] = . and ph38a[i] = 1 then ph_ag2[i] = 6;
+512                  else if ph_ag2[i] = . and ph45a[i] = 1 then ph_ag2[i] = 7;
+513          end;
+514          else if ph_ag1[i] = 5 then do;
+515              if ph38a[i] = 1 then ph_ag2[i] = 6;
+516                  else if ph_ag2[i] = . and ph45a[i] = 1 then ph_ag2[i] = 7;
+517          end;
+518          else if ph_ag1[i] = 6 and ph45a[i] = 1 then ph_ag2[i] = 7;
+519
+520          if ph_ag2[i] = . and N(ph15a[i], ph18a[i], ph21a[i], ph26a[i], ph32a[i], ph38a[i],
+520! ph45a[i]) > 0 then ph_ag2[i] = 0;
+521
+522          ph_lag[i] = ph_ag2[i] - ph_ag1[i];
+523      end;
+524
+525      * AnyAnx - Lifetime;
+526      if SUM(anyanx18, anyanx21, anyanx26, anyanx32, anyanx38, anyanx45)        > 0 then anyanx
+526!  = 1;
+527          else if N(anyanx18, anyanx21, anyanx26, anyanx32, anyanx38, anyanx45) > 0 then anyanx
+527!  = 0;
+528
+529      * # Dx by phases;
+530      Ndx1518 = SUM(Ndx15, Ndx18);
+531      Ndx1521 = SUM(Ndx15, Ndx18, Ndx21);
+532      Ndx1526 = SUM(Ndx15, Ndx18, Ndx21, Ndx26);
+533      Ndx1532 = SUM(Ndx15, Ndx18, Ndx21, Ndx26, Ndx32);
+534      Ndx1538 = SUM(Ndx15, Ndx18, Ndx21, Ndx26, Ndx32, Ndx38);
+535      Ndx1545 = SUM(Ndx15, Ndx18, Ndx21, Ndx26, Ndx32, Ndx38, Ndx45);
+536
+537      Ndx1545_trim = Ndx1545;
+538      if Ndx1545_trim > 25 then Ndx1545_trim = 25;
+539
+540      Ndx1845 = SUM(Ndx18, Ndx21, Ndx26, Ndx32, Ndx38, Ndx45);
+541      Ndx2145 = SUM(       Ndx21, Ndx26, Ndx32, Ndx38, Ndx45);
+542      Ndx2645 = SUM(              Ndx26, Ndx32, Ndx38, Ndx45);
+543      Ndx3245 = SUM(                     Ndx32, Ndx38, Ndx45);
+544      Ndx3845 = SUM(                            Ndx38, Ndx45);
+545
+546      * Dx-families over time;
+547      Nint1518 = SUM(anyint15, anyint18);
+548      Nint1521 = SUM(anyint15, anyint18, anyint21);
+549      Nint1526 = SUM(anyint15, anyint18, anyint21, anyint26);
+550      Nint1532 = SUM(anyint15, anyint18, anyint21, anyint26, anyint32);
+551      Nint1538 = SUM(anyint15, anyint18, anyint21, anyint26, anyint32, anyint38);
+552      Nint1545 = SUM(anyint15, anyint18, anyint21, anyint26, anyint32, anyint38, anyint45);
+553
+554      Next1518 = SUM(anyext15, anyext18);
+555      Next1521 = SUM(anyext15, anyext18, anyext21);
+556      Next1526 = SUM(anyext15, anyext18, anyext21, anyext26);
+557      Next1532 = SUM(anyext15, anyext18, anyext21, anyext26, anyext32);
+558      Next1538 = SUM(anyext15, anyext18, anyext21, anyext26, anyext32, anyext38);
+559      Next1545 = SUM(anyext15, anyext18, anyext21, anyext26, anyext32, anyext38, anyext45);
+560
+561      Nthd1821 = SUM(anythd18, anythd21);
+562      Nthd1826 = SUM(anythd18, anythd21, anythd26);
+563      Nthd1832 = SUM(anythd18, anythd21, anythd26, anythd32);
+564      Nthd1838 = SUM(anythd18, anythd21, anythd26, anythd32, anythd38);
+565      Nthd1845 = SUM(anythd18, anythd21, anythd26, anythd32, anythd38, anythd45);
+566
+567      Nfam15 = 0; Nfam1518 = 0; Nfam1521 = 0; Nfam1526 = 0; Nfam1532 = 0; Nfam1538 = 0;
+567! Nfam1545 = 0;
+568
+569      array ints [7] anyint15 Nint1518 Nint1521 Nint1526 Nint1532 Nint1538 Nint1545;
+570      array exts [7] anyext15 Next1518 Next1521 Next1526 Next1532 Next1538 Next1545;
+571      array thds [7] null     anythd18 Nthd1821 Nthd1826 Nthd1832 Nthd1838 Nthd1845;
+572      array Nfam [7] Nfam15   Nfam1518 Nfam1521 Nfam1526 Nfam1532 Nfam1538 Nfam1545;
+573
+574      do i = 1 to 7;
+575          if ints[i] > 0 then Nfam[i] = Nfam[i] + 1;
+576          if exts[i] > 0 then Nfam[i] = Nfam[i] + 1;
+577          if thds[i] > 0 then Nfam[i] = Nfam[i] + 1;
+578          if N(ints[i], exts[i], thds[i]) = 0 then Nfam[i] = .;
+579      end;
+580
+581      * Unique Dx over time;
+582      Ngad1518 = SUM(anx15, gad18);
+583      Ngad1521 = SUM(anx15, gad18, gad21);
+584      Ngad1526 = SUM(anx15, gad18, gad21, gad26);
+585      Ngad1532 = SUM(anx15, gad18, gad21, gad26, gad32);
+586      Ngad1538 = SUM(anx15, gad18, gad21, gad26, gad32, gad38);
+587      Ngad1545 = SUM(anx15, gad18, gad21, gad26, gad32, gad38, gad45);
+588
+589      Nmde1518 = SUM(dep15, mde18);
+590      Nmde1521 = SUM(dep15, mde18, mde21);
+591      Nmde1526 = SUM(dep15, mde18, mde21, mde26);
+592      Nmde1532 = SUM(dep15, mde18, mde21, mde26, mde32);
+593      Nmde1538 = SUM(dep15, mde18, mde21, mde26, mde32, mde38);
+594      Nmde1545 = SUM(dep15, mde18, mde21, mde26, mde32, mde38, mde45);
+595
+596      Nfear1821 = SUM(fear18, fear21);
+597      Nfear1826 = SUM(fear18, fear21, fear26);
+598      Nfear1832 = SUM(fear18, fear21, fear26, fear32);
+599      Nfear1838 = SUM(fear18, fear21, fear26, fear32, fear38);
+600      Nfear1845 = SUM(fear18, fear21, fear26, fear32, fear38, fear45);
+601
+602      Neat1821 = SUM(eat18, eat21);
+603      Neat1826 = SUM(eat18, eat21, eat26);
+604
+605      Nptsd2632 = SUM(ptsd26, ptsd32);
+606      Nptsd2638 = SUM(ptsd26, ptsd32, ptsd38);
+607      Nptsd2645 = SUM(ptsd26, ptsd32, ptsd38, ptsd45);
+608
+609
+610      Nadhd1518 = SUM(adhd15, adhd18);
+611      Nadhd1538 = SUM(adhd15, adhd18, adhd38);
+612      Nadhd1545 = SUM(adhd15, adhd18, adhd38, adhd45);
+613
+614      Ncd1518 = SUM(cd15, cd18);
+615      Ncd1521 = SUM(cd15, cd18, cd21);
+616      Ncd1526 = SUM(cd15, cd18, cd21, cd26);
+617      Ncd1532 = SUM(cd15, cd18, cd21, cd26, cd32);
+618      Ncd1538 = SUM(cd15, cd18, cd21, cd26, cd32, cd38);
+619      Ncd1545 = SUM(cd15, cd18, cd21, cd26, cd32, cd38, cd45);
+620
+621      Nalc1821 = SUM(alc18, alc21);
+622      Nalc1826 = SUM(alc18, alc21, alc26);
+623      Nalc1832 = SUM(alc18, alc21, alc26, alc32);
+624      Nalc1838 = SUM(alc18, alc21, alc26, alc32, alc38);
+625      Nalc1845 = SUM(alc18, alc21, alc26, alc32, alc38, alc45);
+626
+627      Ntob1821 = SUM(tob18, tob21);
+628      Ntob1826 = SUM(tob18, tob21, tob26);
+629      Ntob1832 = SUM(tob18, tob21, tob26, tob32);
+630      Ntob1838 = SUM(tob18, tob21, tob26, tob32, tob38);
+631      Ntob1845 = SUM(tob18, tob21, tob26, tob32, tob38, tob45);
+632
+633      Nmar1821 = SUM(mar18, mar21);
+634      Nmar1826 = SUM(mar18, mar21, mar26);
+635      Nmar1832 = SUM(mar18, mar21, mar26, mar32);
+636      Nmar1838 = SUM(mar18, mar21, mar26, mar32, mar38);
+637      Nmar1845 = SUM(mar18, mar21, mar26, mar32, mar38, mar45);
+638
+639      Ndrg2632 = SUM(drg26, drg32);
+640      Ndrg2638 = SUM(drg26, drg32, drg38);
+641      Ndrg2645 = SUM(drg26, drg32, drg38, drg45);
+642
+643
+644      Nocd1821 = SUM(ocd18, ocd21);
+645      Nocd1826 = SUM(ocd18, ocd21, ocd26);
+646      Nocd1832 = SUM(ocd18, ocd21, ocd26, ocd32);
+647      Nocd1838 = SUM(ocd18, ocd21, ocd26, ocd32, ocd38);
+648      Nocd1845 = SUM(ocd18, ocd21, ocd26, ocd32, ocd38, ocd45);
+649
+650      Nman2126 = SUM(man21, man26);
+651      Nman2132 = SUM(man21, man26, man32);
+652      Nman2138 = SUM(man21, man26, man32, man38);
+653      Nman2145 = SUM(man21, man26, man32, man38, man45);
+654
+655      Nscz2126 = SUM(scz21, scz26);
+656      Nscz2132 = SUM(scz21, scz26, scz32);
+657      Nscz2138 = SUM(scz21, scz26, scz32, scz38);
+658      Nscz2145 = SUM(scz21, scz26, scz32, scz38, scz45);
+659
+660      NUnDx15 = 0; NUnDx1518 = 0; NUnDx1521 = 0; NUnDx1526 = 0; NUnDx1532 = 0; NUnDx1538 = 0;
+660! NUnDx1545 = 0;
+661
+662      array gads  [7] anx15  Ngad1518  Ngad1521  Ngad1526  Ngad1532  Ngad1538  Ngad1545;
+663      array mdes  [7] dep15  Nmde1518  Nmde1521  Nmde1526  Nmde1532  Nmde1538  Nmde1545;
+664      array fears [7] null   fear18    Nfear1821 Nfear1826 Nfear1832 Nfear1838 Nfear1845;
+665      array eats  [7] null   eat18     Neat1821  Neat1826  Neat1826  Neat1826  Neat1826;
+666      array ptsds [7] null   null      null      ptsd26    Nptsd2632 Nptsd2638 Nptsd2645;
+667
+668      array adhds [7] adhd15 Nadhd1518 null      null      null      Nadhd1538 Nadhd1545;
+669      array cds   [7] cd15   Ncd1518   Ncd1521   Ncd1526   Ncd1532   Ncd1538   Ncd1545;
+670      array alcs  [7] null   alc18     Nalc1821  Nalc1826  Nalc1832  Nalc1838  Nalc1845;
+671      array tobs  [7] null   tob18     Ntob1821  Ntob1826  Ntob1832  Ntob1838  Ntob1845;
+672      array mars  [7] null   mar18     Nmar1821  Nmar1826  Nmar1832  Nmar1838  Nmar1845;
+673      array drgs  [7] null   null      null      drg26     Ndrg2632  Ndrg2638  Ndrg2645;
+674
+675      array ocds  [7] null   ocd18     Nocd1821  Nocd1826  Nocd1832  Nocd1838  Nocd1845;
+676      array mans  [7] null   null      man21     Nman2126  Nman2132  Nman2138  Nman2145;
+677      array sczs  [7] null   null      scz21     Nscz2126  Nscz2132  Nscz2138  Nscz2145;
+678
+679      array NUndx [7] NUnDx15  NUnDx1518 NUnDx1521 NUnDx1526 NUnDx1532 NUnDx1538 NUnDx1545;
+680
+681      do i = 1 to 7;
+682          if gads  [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+683          if mdes  [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+684          if fears [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+685          if eats  [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+686          if ptsds [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+687
+688          if adhds [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+689          if cds   [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+690          if alcs  [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+691          if tobs  [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+692          if mars  [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+693          if drgs  [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+694
+695          if ocds  [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+696          if mans  [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+697          if sczs  [i] > 0 then NUnDx[i] = NUnDx[i] + 1;
+698
+699          if N(gads[i],  mdes[i], fears[i], eats[i], ptsds[i],
+700               adhds[i], cds[i],  alcs[i],  tobs[i], mars[i], drgs[i],
+701               ocds[i],  mans[i], sczs[i]) = 0 then NUnDx[i] = .;
+702      end;
+703
+704      * # different types of dx (at diagnosis level);
+705      Ndxtypes1545 = SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd, anyalc,
+705! anytob, anymar, anydrg, anyocd, anyman, anyscz);
+706      *if Ndxtypes1545 > 5 then Ndxtypes1545 = 5;
+707
+708      * # phases w/ dx;
+709      Ndxphases1545 = SUM(anydx15, anydx18, anydx21, anydx26, anydx32, anydx38, anydx45);
+710
+711      * First dx type;
+712      if dxph1 = 1          then dxtype1 = dxtype15;
+713          else if dxph1 = 2 then dxtype1 = dxtype18;
+714          else if dxph1 = 3 then dxtype1 = dxtype21;
+715          else if dxph1 = 4 then dxtype1 = dxtype26;
+716          else if dxph1 = 5 then dxtype1 = dxtype32;
+717          else if dxph1 = 6 then dxtype1 = dxtype38;
+718          else if dxph1 = 7 then dxtype1 = dxtype45;
+719      * Ever dx type;
+720      if anythd =  1                              then everdxtype = 1;        * Any thought
+720! disorder;
+721          else if anyint     =  1 and anyext NE 1 then everdxtype = 2;        * Internalizing
+721! only;
+722          else if anyint     =  1 and anyext =  1 then everdxtype = 3;        * Internalizing &
+722!  Externalizing;
+723          else if anyint     NE 1 and anyext =  1 then everdxtype = 4;        * Externalizing
+723! only;
+724          else if anydx      =  0                 then everdxtype = 5;        * No DX;
+725          else if everdxtype = .                  then everdxtype = 6;        * Missing;
+726
+727      * Pure dx;
+728      if          anygad  = 1 and SUM(        anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+728!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) = 0 then puregad  = 1;
+729          else if anygad  = 1 and SUM(        anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+729!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) > 0 then puregad  = 0;
+730      if          anymde  = 1 and SUM(anygad,         anyfear, anyeat, anyptsd, anyadhd, anycd,
+730!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) = 0 then puremde  = 1;
+731          else if anymde  = 1 and SUM(anygad,         anyfear, anyeat, anyptsd, anyadhd, anycd,
+731!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) > 0 then puremde  = 0;
+732      if          anyfear = 1 and SUM(anygad, anymde,          anyeat, anyptsd, anyadhd, anycd,
+732!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) = 0 then purefear = 1;
+733          else if anyfear = 1 and SUM(anygad, anymde,          anyeat, anyptsd, anyadhd, anycd,
+733!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) > 0 then purefear = 0;
+734      if          anyeat  = 1 and SUM(anygad, anymde, anyfear,         anyptsd, anyadhd, anycd,
+734!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) = 0 then pureeat  = 1;
+735          else if anyeat  = 1 and SUM(anygad, anymde, anyfear,         anyptsd, anyadhd, anycd,
+735!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) > 0 then pureeat  = 0;
+736      if          anyptsd = 1 and SUM(anygad, anymde, anyfear, anyeat,          anyadhd, anycd,
+736!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) = 0 then pureptsd = 1;
+737          else if anyptsd = 1 and SUM(anygad, anymde, anyfear, anyeat,          anyadhd, anycd,
+737!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) > 0 then pureptsd = 0;
+738      if          anyadhd = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd,          anycd,
+738!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) = 0 then pureadhd = 1;
+739          else if anyadhd = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd,          anycd,
+739!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) > 0 then pureadhd = 0;
+740      if          anycd   = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd,
+740!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) = 0 then purecd   = 1;
+741          else if anycd   = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd,
+741!  anyalc, anytob, anymar, anydrg, anyocd, anyman, anyscz) > 0 then purecd   = 0;
+742      if          anyalc  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+742!          anytob, anymar, anydrg, anyocd, anyman, anyscz) = 0 then purealc  = 1;
+743          else if anyalc  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+743!          anytob, anymar, anydrg, anyocd, anyman, anyscz) > 0 then purealc  = 0;
+744      if          anytob  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+744!  anyalc,         anymar, anydrg, anyocd, anyman, anyscz) = 0 then puretob  = 1;
+745          else if anytob  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+745!  anyalc,         anymar, anydrg, anyocd, anyman, anyscz) > 0 then puretob  = 0;
+746      if          anymar  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+746!  anyalc, anytob,         anydrg, anyocd, anyman, anyscz) = 0 then puremar  = 1;
+747          else if anymar  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+747!  anyalc, anytob,         anydrg, anyocd, anyman, anyscz) > 0 then puremar  = 0;
+748      if          anydrg  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+748!  anyalc, anytob, anymar,         anyocd, anyman, anyscz) = 0 then puredrg  = 1;
+749          else if anydrg  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+749!  anyalc, anytob, anymar,         anyocd, anyman, anyscz) > 0 then puredrg  = 0;
+750      if          anyocd  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+750!  anyalc, anytob, anymar, anydrg,         anyman, anyscz) = 0 then pureocd  = 1;
+751          else if anyocd  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+751!  anyalc, anytob, anymar, anydrg,         anyman, anyscz) > 0 then pureocd  = 0;
+752      if          anyman  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+752!  anyalc, anytob, anymar, anydrg, anyocd,         anyscz) = 0 then pureman  = 1;
+753          else if anyman  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+753!  anyalc, anytob, anymar, anydrg, anyocd,         anyscz) > 0 then pureman  = 0;
+754      if          anyscz  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+754!  anyalc, anytob, anymar, anydrg, anyocd, anyman)         = 0 then purescz  = 1;
+755          else if anyscz  = 1 and SUM(anygad, anymde, anyfear, anyeat, anyptsd, anyadhd, anycd,
+755!  anyalc, anytob, anymar, anydrg, anyocd, anyman)         > 0 then purescz  = 0;
+756
+757      if anyint = 1 and SUM(anythd, anyext) = 0 then pureint = 1;
+758          else if anyint = 1 and SUM(anythd, anyext) > 0 then pureint = 0;
+759      if anyext = 1 and SUM(anyint, anythd) = 0 then pureext = 1;
+760          else if anyext = 1 and SUM(anyint, anythd) > 0 then pureext = 0;
+761      if anythd = 1 and SUM(anyint, anyext) = 0 then purethd = 1;
+762          else if anythd = 1 and SUM(anyint, anyext) > 0 then purethd = 0;
+763
+764      * Remission?;
+765      if Ndx1545 = 0 then remit1 = -1;
+766          else if anydx15 = 1 and SUM(anydx18, anydx21, anydx26, anydx32, anydx38, anydx45) > 0
+766!  then remit1 = 0;
+767          else if anydx18 = 1 and SUM(         anydx21, anydx26, anydx32, anydx38, anydx45) > 0
+767!  then remit1 = 0;
+768          else if anydx21 = 1 and SUM(                  anydx26, anydx32, anydx38, anydx45) > 0
+768!  then remit1 = 0;
+769          else if anydx26 = 1 and SUM(                           anydx32, anydx38, anydx45) > 0
+769!  then remit1 = 0;
+770          else if anydx32 = 1 and SUM(                                    anydx38, anydx45) > 0
+770!  then remit1 = 0;
+771          else if anydx38 = 1 and SUM(                                             anydx45) > 0
+771!  then remit1 = 0;
+772          else if Ndx1545 > 0 then remit1 = 1;
+773
+774          * First dx at 45;
+775          if remit1 = 1 and anydx45 = 1 then remit1 = 2;
+776
+777          * No more data after dx;
+778          if remit1 = 1 and anydx15 = 1 and N(anydx18, anydx21, anydx26, anydx32, anydx38,
+778! anydx45) = 0 then remit1 = 3;
+779          if remit1 = 1 and anydx18 = 1 and N(         anydx21, anydx26, anydx32, anydx38,
+779! anydx45) = 0 then remit1 = 3;
+780          if remit1 = 1 and anydx21 = 1 and N(                  anydx26, anydx32, anydx38,
+780! anydx45) = 0 then remit1 = 3;
+781          if remit1 = 1 and anydx26 = 1 and N(                           anydx32, anydx38,
+781! anydx45) = 0 then remit1 = 3;
+782          if remit1 = 1 and anydx32 = 1 and N(                                    anydx38,
+782! anydx45) = 0 then remit1 = 3;
+783          if remit1 = 1 and anydx38 = 1 and N(
+783! anydx45) = 0 then remit1 = 3;
+784
+785      * # Phases between Int/Ext/Thd and next Int/Ext/Thd;
+786      array tyty  [9] intintph2 intextph2 intthdph2 extintph2 extextph2 extthdph2 thdintph2
+786! thdextph2 thdthdph2;
+787      array ty    [3] intph1   extph1   thdph1;
+788      array ph18b [3] anyint18 anyext18 anythd18;
+789      array ph21b [3] anyint21 anyext21 anythd21;
+790      array ph26b [3] anyint26 anyext26 anythd26;
+791      array ph32b [3] anyint32 anyext32 anythd32;
+792      array ph38b [3] anyint38 anyext38 anythd38;
+793      array ph45b [3] anyint45 anyext45 anythd45;
+794
+795      do i = 1 to 3;
+796          do j = 1 to 3;
+797              if i = 1 and j = 1 then k = 1;
+798                  else k = k + 1;
+799
+800              if ty[i] = 1 then do;
+801                  if ph18b[j] = 1 then tyty[k] = 2;
+802                      else if tyty[k] = . and ph21b[j] = 1 then tyty[k] = 3;
+803                      else if tyty[k] = . and ph26b[j] = 1 then tyty[k] = 4;
+804                      else if tyty[k] = . and ph32b[j] = 1 then tyty[k] = 5;
+805                      else if tyty[k] = . and ph38b[j] = 1 then tyty[k] = 6;
+806                      else if tyty[k] = . and ph45b[j] = 1 then tyty[k] = 7;
+807              end;
+808              else if ty[i] = 2 then do;
+809                  if ph21b[j] = 1 then tyty[k] = 3;
+810                      else if tyty[k] = . and ph26b[j] = 1 then tyty[k] = 4;
+811                      else if tyty[k] = . and ph32b[j] = 1 then tyty[k] = 5;
+812                      else if tyty[k] = . and ph38b[j] = 1 then tyty[k] = 6;
+813                      else if tyty[k] = . and ph45b[j] = 1 then tyty[k] = 7;
+814              end;
+815              else if ty[i] = 3 then do;
+816                  if ph26b[j] = 1 then tyty[k] = 4;
+817                      else if tyty[k] = . and ph32b[j] = 1 then tyty[k] = 5;
+818                      else if tyty[k] = . and ph38b[j] = 1 then tyty[k] = 6;
+819                      else if tyty[k] = . and ph45b[j] = 1 then tyty[k] = 7;
+820              end;
+821              else if ty[i] = 4 then do;
+822                  if ph32b[j] = 1 then tyty[k] = 5;
+823                      else if tyty[k] = . and ph38b[j] = 1 then tyty[k] = 6;
+824                      else if tyty[k] = . and ph45b[j] = 1 then tyty[k] = 7;
+825              end;
+826              else if ty[i] = 5 then do;
+827                  if ph38b[j] = 1 then tyty[k] = 6;
+828                  else if tyty[k] = . and ph45b[j] = 1 then tyty[k] = 7;
+829              end;
+830              else if ty[i] = 6 and ph45b[j] = 1 then tyty[k] = 7;
+831          end;
+832      end;
+833
+834      * Lag between phases;
+835      intintlag = intintph2 - intph1;
+836      intextlag = intextph2 - intph1;
+837      intthdlag = intthdph2 - intph1;
+838      extintlag = extintph2 - extph1;
+839      extextlag = extextph2 - extph1;
+840      extthdlag = extthdph2 - extph1;
+841      thdintlag = thdintph2 - thdph1;
+842      thdextlag = thdextph2 - thdph1;
+843      thdthdlag = thdthdph2 - thdph1;
+844
+845      * Yes/No transitions;
+846      if anyint = 1 then do;
+847          intint = 0; intext = 0; intthd = 0;
+848          if intintph2 > 0 then intint = 1;
+849          if intextph2 > 0 then intext = 1;
+850          if intthdph2 > 0 then intthd = 1;
+851      end;
+852      if anyext = 1 then do;
+853          extint = 0; extext = 0; extthd = 0;
+854          if extintph2 > 0 then extint = 1;
+855          if extextph2 > 0 then extext = 1;
+856          if extthdph2 > 0 then extthd = 1;
+857      end;
+858      if anythd = 1 then do;
+859          thdint = 0; thdext = 0; thdthd = 0;
+860          if thdintph2 > 0 then thdint = 1;
+861          if thdextph2 > 0 then thdext = 1;
+862          if thdthdph2 > 0 then thdthd = 1;
+863      end;
+864
+865      * Subsequent Phases w/ INT;
+866      if SUM(anyint18, anyint21, anyint26, anyint32, anyint38, anyint45) > 1 then anyint1845 =
+866! 1; else anyint1845 = 0;
+867      if SUM(          anyint21, anyint26, anyint32, anyint38, anyint45) > 1 then anyint2145 =
+867! 1; else anyint2145 = 0;
+868      if SUM(                    anyint26, anyint32, anyint38, anyint45) > 1 then anyint2645 =
+868! 1; else anyint2645 = 0;
+869      if SUM(                              anyint32, anyint38, anyint45) > 1 then anyint3245 =
+869! 1; else anyint3245 = 0;
+870      if SUM(                                        anyint38, anyint45) > 1 then anyint3845 =
+870! 1; else anyint3845 = 0;
+871
+872      * Subsequent Phases w/ EXT;
+873      if SUM(anyext18, anyext21, anyext26, anyext32, anyext38, anyext45) > 1 then anyext1845 =
+873! 1; else anyext1845 = 0;
+874      if SUM(          anyext21, anyext26, anyext32, anyext38, anyext45) > 1 then anyext2145 =
+874! 1; else anyext2145 = 0;
+875      if SUM(                    anyext26, anyext32, anyext38, anyext45) > 1 then anyext2645 =
+875! 1; else anyext2645 = 0;
+876      if SUM(                              anyext32, anyext38, anyext45) > 1 then anyext3245 =
+876! 1; else anyext3245 = 0;
+877      if SUM(                                        anyext38, anyext45) > 1 then anyext3845 =
+877! 1; else anyext3845 = 0;
+878
+879      * Subsequent Phases w/ THD;
+880      if SUM(anythd18, anythd21, anythd26, anythd32, anythd38, anythd45) > 1 then anythd1845 =
+880! 1; else anythd1845 = 0;
+881      if SUM(          anythd21, anythd26, anythd32, anythd38, anythd45) > 1 then anythd2145 =
+881! 1; else anythd2145 = 0;
+882      if SUM(                    anythd26, anythd32, anythd38, anythd45) > 1 then anythd2645 =
+882! 1; else anythd2645 = 0;
+883      if SUM(                              anythd32, anythd38, anythd45) > 1 then anythd3245 =
+883! 1; else anythd3245 = 0;
+884      if SUM(                                        anythd38, anythd45) > 1 then anythd3845 =
+884! 1; else anythd3845 = 0;
+885
+886
+887      * Prep for correlations;
+888      * ... "No dx" moves to "high" end of first-dx-age;
+889      * ... "No dx" set to missing for N-dx, N-dx-types;
+890      ao = dxph1;
+891      if ao = 0 then ao = 8;
+892
+893      Ndxphases1545_no0 = Ndxphases1545;
+894      if Ndxphases1545_no0 = 0 then Ndxphases1545_no0 = .;
+895
+896      Ndxtypes1545_no0 = Ndxtypes1545;
+897      if Ndxtypes1545_no0 = 0 then Ndxtypes1545_no0 = .;
+898
+899      * Drop vars that are not possible given available data;
+900      drop    i j k
+901              anythd15    Nthd15      firstthd15
+902              firstfear15 firsteat15  firstptsd15 firstalc15 firsttob15 firstmar15 firstdrg15
+902! firstocd15 firstman15 firstscz15
+903              firstptsd18 firstdrg18  firstman18  firstscz18
+904              firstptsd21 firstadhd21 firstdrg21
+905              firstadhd26
+906              firsteat32  firstadhd32
+907              firsteat38
+908              firsteat45;
+909  run;
+
+NOTE: Missing values were generated as a result of performing an operation on missing values.
+      Each place is given by: (Number of times) at (Line):(Column).
+      1555 at 361:22   4413 at 364:31   577 at 368:22    576 at 372:12    576 at 375:19
+      539 at 379:12    539 at 382:19    1491 at 386:12   1491 at 389:19   495 at 393:12
+      495 at 396:18    636 at 435:12    636 at 439:20    636 at 522:31    34 at 526:8
+      45 at 530:15     25 at 531:15     21 at 532:15     21 at 533:15     21 at 534:15
+      21 at 535:15     34 at 540:15     40 at 541:15     44 at 542:15     54 at 543:15
+      68 at 544:15     45 at 547:16     29 at 548:16     22 at 549:16     21 at 550:16
+      21 at 551:16     21 at 552:16     45 at 554:16     29 at 555:16     22 at 556:16
+      21 at 557:16     21 at 558:16     21 at 559:16     39 at 561:16     34 at 562:16
+      34 at 563:16     34 at 564:16     34 at 565:16     45 at 582:16     29 at 583:16
+      22 at 584:16     21 at 585:16     21 at 586:16     21 at 587:16     45 at 589:16
+      29 at 590:16     22 at 591:16     21 at 592:16     21 at 593:16     21 at 594:16
+      50 at 596:17     39 at 597:17     37 at 598:17     34 at 599:17     34 at 600:17
+      54 at 602:16     39 at 603:16     51 at 605:17     46 at 606:17     45 at 607:17
+      45 at 610:17     27 at 611:17     26 at 612:17     45 at 614:15     29 at 615:15
+      22 at 616:15     21 at 617:15     21 at 618:15     21 at 619:15     50 at 621:16
+      39 at 622:16     37 at 623:16     34 at 624:16     34 at 625:16     49 at 627:16
+      39 at 628:16     35 at 629:16     34 at 630:16     34 at 631:16     52 at 633:16
+      39 at 634:16     37 at 635:16     34 at 636:16     34 at 637:16     51 at 639:16
+      46 at 640:16     45 at 641:16     52 at 644:16     39 at 645:16     37 at 646:16
+      34 at 647:16     34 at 648:16     86 at 650:16     86 at 651:16     86 at 652:16
+      78 at 653:16     80 at 655:16     80 at 656:16     80 at 657:16     73 at 658:16
+      21 at 705:20     21 at 709:21     21 at 728:33     21 at 729:33     21 at 730:33
+      21 at 731:33     21 at 732:33     21 at 733:33     21 at 734:33     21 at 735:33
+      21 at 736:33     21 at 737:33     21 at 738:33     21 at 739:33     21 at 740:33
+      21 at 741:33     21 at 742:33     21 at 743:33     21 at 744:33     21 at 745:33
+      21 at 746:33     21 at 747:33     21 at 748:33     21 at 749:33     21 at 750:33
+      21 at 751:33     21 at 752:33     21 at 753:33     21 at 754:33     21 at 755:33
+      21 at 757:23     21 at 758:32     21 at 759:23     21 at 760:32     21 at 761:23
+      21 at 762:32     26 at 766:33     30 at 767:33     31 at 768:33     35 at 769:33
+      38 at 770:33     46 at 771:33     536 at 835:27    659 at 836:27    901 at 837:27
+      654 at 838:27    592 at 839:27    916 at 840:27    906 at 841:27    936 at 842:27
+      961 at 843:27    34 at 866:8      40 at 867:8      45 at 868:8      59 at 869:8
+      78 at 870:8      34 at 873:8      40 at 874:8      44 at 875:8      54 at 876:8
+      68 at 877:8      34 at 880:8      41 at 881:8      45 at 882:8      59 at 883:8
+      73 at 884:8
+NOTE: There were 1037 observations read from the data set WORK.MH.
+NOTE: The data set WORK.MH_1 has 1037 observations and 564 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.15 seconds
+      cpu time            0.06 seconds
+
+
+910  * Sankey freqs;
+911  * Flip data for R Sankey, v2;
+912  data dxtype_phase;
+913      set MH_1;
+914
+915      null = .;
+916      age15 = 1; age18 = 2; age21 = 3; age26 = 4; age32 = 5; age38 = 6; age45 = 7;
+917
+918      array ph   [7] age15     age18     age21     age26     age32     age38     age45;
+919      array dxt  [7] dxtype15a dxtype18a dxtype21a dxtype26a dxtype32a dxtype38a dxtype45a;
+920      array dxt1 [7] dxtype18a dxtype21a dxtype26a dxtype32a dxtype38a dxtype45a null;
+921
+922      do i = 1 to 7;
+923          phase    = ph[i];
+924          dxtype_1 = dxt[i];
+925          dxtype_2 = dxt1[i];
+926
+927          output;
+928      end;
+929
+930      keep snum phase dxtype_1 dxtype_2 EHC_NHSPsyHos2045;
+931  run;
+
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: The data set WORK.DXTYPE_PHASE has 7259 observations and 5 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+
+
+932
+933  * Recode dxtype;
+934  data dxtype_phase;
+935      set dxtype_phase;
+936
+937      if dxtype_1 = 0 then dxtype1 = 10;              * Deceased;
+938          else if dxtype_1 =  1 then dxtype1 = 8;     * THD & INT & EXT;
+939          else if dxtype_1 =  2 then dxtype1 = 7;     * THD & INT;
+940          else if dxtype_1 =  3 then dxtype1 = 6;     * THD & EXT;
+941          else if dxtype_1 =  4 then dxtype1 = 5;     * INT & EXT;
+942          else if dxtype_1 =  5 then dxtype1 = 4;     * THD;
+943          else if dxtype_1 =  6 then dxtype1 = 3;     * INT;
+944          else if dxtype_1 =  7 then dxtype1 = 2;     * EXT;
+945          else if dxtype_1 =  8 then dxtype1 = 1;     * Remitted;
+946          else if dxtype_1 =  9 then dxtype1 = 0;     * No Dx;
+947          else if dxtype_1 = 10 then dxtype1 = 9;     * Missing;
+948
+949      if dxtype_2 = 0 then dxtype2 = 10;
+950          else if dxtype_2 =  1 then dxtype2 = 8;
+951          else if dxtype_2 =  2 then dxtype2 = 7;
+952          else if dxtype_2 =  3 then dxtype2 = 6;
+953          else if dxtype_2 =  4 then dxtype2 = 5;
+954          else if dxtype_2 =  5 then dxtype2 = 4;
+955          else if dxtype_2 =  6 then dxtype2 = 3;
+956          else if dxtype_2 =  7 then dxtype2 = 2;
+957          else if dxtype_2 =  8 then dxtype2 = 1;
+958          else if dxtype_2 =  9 then dxtype2 = 0;
+959          else if dxtype_2 = 10 then dxtype2 = 9;
+960  run;
+
+NOTE: There were 7259 observations read from the data set WORK.DXTYPE_PHASE.
+NOTE: The data set WORK.DXTYPE_PHASE has 7259 observations and 7 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+
+
+961
+962  proc freq data = dxtype_phase;
+963      table phase*dxtype1*dxtype2;
+964      format dxtype1 dxtype2 DXTY.;
+965      ods output CrossTabFreqs = backward_all;
+966  run;
+
+NOTE: The data set WORK.BACKWARD_ALL has 864 observations and 11 variables.
+NOTE: There were 7259 observations read from the data set WORK.DXTYPE_PHASE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.09 seconds
+      cpu time            0.07 seconds
+
+
+967
+968  data backward_allA;
+969      set backward_all;
+970
+971      length dxty1 dxty2 $15;
+972
+973      if dxtype1 = 0 then dxty1 = 'Undiagnosed';
+974          else if dxtype1 =  1 then dxty1 = 'Remitted';
+975          else if dxtype1 =  2 then dxty1 = 'Ext';
+976          else if dxtype1 =  3 then dxty1 = 'Int';
+977          else if dxtype1 =  4 then dxty1 = 'Thd';
+978          else if dxtype1 =  5 then dxty1 = 'Int+Ext';
+979          else if dxtype1 =  6 then dxty1 = 'Thd+Ext';
+980          else if dxtype1 =  7 then dxty1 = 'Thd+Int';
+981          else if dxtype1 =  8 then dxty1 = 'Thd+Int+Ext';
+982          else if dxtype1 =  9 then dxty1 = 'Missing';
+983          else if dxtype1 = 10 then dxty1 = 'Deceased';
+984      if dxtype2 = 0 then dxty2 = 'Undiagnosed';
+985          else if dxtype2 =  1 then dxty2 = 'Remitted';
+986          else if dxtype2 =  2 then dxty2 = 'Ext';
+987          else if dxtype2 =  3 then dxty2 = 'Int';
+988          else if dxtype2 =  4 then dxty2 = 'Thd';
+989          else if dxtype2 =  5 then dxty2 = 'Int+Ext';
+990          else if dxtype2 =  6 then dxty2 = 'Thd+Ext';
+991          else if dxtype2 =  7 then dxty2 = 'Thd+Int';
+992          else if dxtype2 =  8 then dxty2 = 'Thd+Int+Ext';
+993          else if dxtype2 =  9 then dxty2 = 'Missing';
+994          else if dxtype2 = 10 then dxty2 = 'Deceased';
+995
+996      if frequency = 0 then delete;
+997      if dxtype1   = . then delete;
+998      if dxtype2   = . then delete;
+999
+1000      if phase = 1 then do;                               * Age 15 to Age 18;
+1001          if dxtype1 = 0 then dxtype1 = 0;
+1002              else if dxtype1 =  2 then dxtype1 = 1;
+1003              else if dxtype1 =  3 then dxtype1 = 2;
+1004              else if dxtype1 =  5 then dxtype1 = 3;
+1005              else if dxtype1 =  9 then dxtype1 = 4;
+1006              else if dxtype1 = 10 then dxtype1 = 5;
+1007          if dxtype2 = 0 then dxtype2 = 6;
+1008              else if dxtype2 =  1 then dxtype2 =  7;
+1009              else if dxtype2 =  2 then dxtype2 =  8;
+1010              else if dxtype2 =  3 then dxtype2 =  9;
+1011              else if dxtype2 =  4 then dxtype2 = 10;
+1012              else if dxtype2 =  5 then dxtype2 = 11;
+1013              else if dxtype2 =  6 then dxtype2 = 12;
+1014              else if dxtype2 =  7 then dxtype2 = 13;
+1015              else if dxtype2 =  8 then dxtype2 = 14;
+1016              else if dxtype2 =  9 then dxtype2 = 15;
+1017              else if dxtype2 = 10 then dxtype2 = 16;
+1018      end;
+1019      if phase = 2 then do;                               * Age 18 to Age 21;
+1020          if dxtype1 = 0 then dxtype1 = 6;
+1021              else if dxtype1 =  1 then dxtype1 =  7;
+1022              else if dxtype1 =  2 then dxtype1 =  8;
+1023              else if dxtype1 =  3 then dxtype1 =  9;
+1024              else if dxtype1 =  4 then dxtype1 = 10;
+1025              else if dxtype1 =  5 then dxtype1 = 11;
+1026              else if dxtype1 =  6 then dxtype1 = 12;
+1027              else if dxtype1 =  7 then dxtype1 = 13;
+1028              else if dxtype1 =  8 then dxtype1 = 14;
+1029              else if dxtype1 =  9 then dxtype1 = 15;
+1030              else if dxtype1 = 10 then dxtype1 = 16;
+1031          if dxtype2 = 0 then dxtype2 = 17;
+1032              else if dxtype2 =  1 then dxtype2 = 18;
+1033              else if dxtype2 =  2 then dxtype2 = 19;
+1034              else if dxtype2 =  3 then dxtype2 = 20;
+1035              else if dxtype2 =  4 then dxtype2 = 21;
+1036              else if dxtype2 =  5 then dxtype2 = 22;
+1037              else if dxtype2 =  6 then dxtype2 = 23;
+1038              else if dxtype2 =  7 then dxtype2 = 24;
+1039              else if dxtype2 =  8 then dxtype2 = 25;
+1040              else if dxtype2 =  9 then dxtype2 = 26;
+1041              else if dxtype2 = 10 then dxtype2 = 27;
+1042      end;
+1043      if phase = 3 then do;                               * Age 21 to Age 26;
+1044          if dxtype1 = 0 then dxtype1 = 17;
+1045              else if dxtype1 =  1 then dxtype1 = 18;
+1046              else if dxtype1 =  2 then dxtype1 = 19;
+1047              else if dxtype1 =  3 then dxtype1 = 20;
+1048              else if dxtype1 =  4 then dxtype1 = 21;
+1049              else if dxtype1 =  5 then dxtype1 = 22;
+1050              else if dxtype1 =  6 then dxtype1 = 23;
+1051              else if dxtype1 =  7 then dxtype1 = 24;
+1052              else if dxtype1 =  8 then dxtype1 = 25;
+1053              else if dxtype1 =  9 then dxtype1 = 26;
+1054              else if dxtype1 = 10 then dxtype1 = 27;
+1055          if dxtype2 = 0 then dxtype2 = 28;
+1056              else if dxtype2 =  1 then dxtype2 = 29;
+1057              else if dxtype2 =  2 then dxtype2 = 30;
+1058              else if dxtype2 =  3 then dxtype2 = 31;
+1059              else if dxtype2 =  4 then dxtype2 = 32;
+1060              else if dxtype2 =  5 then dxtype2 = 33;
+1061              else if dxtype2 =  6 then dxtype2 = 34;
+1062              else if dxtype2 =  7 then dxtype2 = 35;
+1063              else if dxtype2 =  8 then dxtype2 = 36;
+1064              else if dxtype2 =  9 then dxtype2 = 37;
+1065              else if dxtype2 = 10 then dxtype2 = 38;
+1066      end;
+1067      if phase = 4 then do;                               * Age 26 to Age 32;
+1068          if dxtype1 = 0 then dxtype1 = 28;
+1069              else if dxtype1 =  1 then dxtype1 = 29;
+1070              else if dxtype1 =  2 then dxtype1 = 30;
+1071              else if dxtype1 =  3 then dxtype1 = 31;
+1072              else if dxtype1 =  4 then dxtype1 = 32;
+1073              else if dxtype1 =  5 then dxtype1 = 33;
+1074              else if dxtype1 =  6 then dxtype1 = 34;
+1075              else if dxtype1 =  7 then dxtype1 = 35;
+1076              else if dxtype1 =  8 then dxtype1 = 36;
+1077              else if dxtype1 =  9 then dxtype1 = 37;
+1078              else if dxtype1 = 10 then dxtype1 = 38;
+1079          if dxtype2 = 0 then dxtype2 = 39;
+1080              else if dxtype2 =  1 then dxtype2 = 40;
+1081              else if dxtype2 =  2 then dxtype2 = 41;
+1082              else if dxtype2 =  3 then dxtype2 = 42;
+1083              else if dxtype2 =  4 then dxtype2 = 43;
+1084              else if dxtype2 =  5 then dxtype2 = 44;
+1085              else if dxtype2 =  6 then dxtype2 = 45;
+1086              else if dxtype2 =  7 then dxtype2 = 46;
+1087              else if dxtype2 =  8 then dxtype2 = 47;
+1088              else if dxtype2 =  9 then dxtype2 = 48;
+1089              else if dxtype2 = 10 then dxtype2 = 49;
+1090      end;
+1091      if phase = 5 then do;                               * Age 32 to Age 38;
+1092          if dxtype1 = 0 then dxtype1 = 39;
+1093              else if dxtype1 =  1 then dxtype1 = 40;
+1094              else if dxtype1 =  2 then dxtype1 = 41;
+1095              else if dxtype1 =  3 then dxtype1 = 42;
+1096              else if dxtype1 =  4 then dxtype1 = 43;
+1097              else if dxtype1 =  5 then dxtype1 = 44;
+1098              else if dxtype1 =  6 then dxtype1 = 45;
+1099              else if dxtype1 =  7 then dxtype1 = 46;
+1100              else if dxtype1 =  8 then dxtype1 = 47;
+1101              else if dxtype1 =  9 then dxtype1 = 48;
+1102              else if dxtype1 = 10 then dxtype1 = 49;
+1103          if dxtype2 = 0 then dxtype2 = 50;
+1104              else if dxtype2 =  1 then dxtype2 = 51;
+1105              else if dxtype2 =  2 then dxtype2 = 52;
+1106              else if dxtype2 =  3 then dxtype2 = 53;
+1107              else if dxtype2 =  4 then dxtype2 = 54;
+1108              else if dxtype2 =  5 then dxtype2 = 55;
+1109              else if dxtype2 =  6 then dxtype2 = 56;
+1110              else if dxtype2 =  7 then dxtype2 = 57;
+1111              else if dxtype2 =  8 then dxtype2 = 58;
+1112              else if dxtype2 =  9 then dxtype2 = 59;
+1113              else if dxtype2 = 10 then dxtype2 = 60;
+1114      end;
+1115      if phase = 6 then do;                               * Age 32 to Age 38;
+1116          if dxtype1 = 0 then dxtype1 = 50;
+1117              else if dxtype1 =  1 then dxtype1 = 51;
+1118              else if dxtype1 =  2 then dxtype1 = 52;
+1119              else if dxtype1 =  3 then dxtype1 = 53;
+1120              else if dxtype1 =  4 then dxtype1 = 54;
+1121              else if dxtype1 =  5 then dxtype1 = 55;
+1122              else if dxtype1 =  6 then dxtype1 = 56;
+1123              else if dxtype1 =  7 then dxtype1 = 57;
+1124              else if dxtype1 =  8 then dxtype1 = 58;
+1125              else if dxtype1 =  9 then dxtype1 = 59;
+1126              else if dxtype1 = 10 then dxtype1 = 60;
+1127          if dxtype2 = 0 then dxtype2 = 61;
+1128              else if dxtype2 =  1 then dxtype2 = 62;
+1129              else if dxtype2 =  2 then dxtype2 = 63;
+1130              else if dxtype2 =  3 then dxtype2 = 64;
+1131              else if dxtype2 =  4 then dxtype2 = 65;
+1132              else if dxtype2 =  5 then dxtype2 = 66;
+1133              else if dxtype2 =  6 then dxtype2 = 67;
+1134              else if dxtype2 =  7 then dxtype2 = 68;
+1135              else if dxtype2 =  8 then dxtype2 = 69;
+1136              else if dxtype2 =  9 then dxtype2 = 70;
+1137              else if dxtype2 = 10 then dxtype2 = 71;
+1138      end;
+1139
+1140      format dxtype1 dxtype2;
+1141
+1142      keep phase dxtype1 dxtype2 dxty1 dxty2 frequency;
+1143  run;
+
+NOTE: There were 864 observations read from the data set WORK.BACKWARD_ALL.
+NOTE: The data set WORK.BACKWARD_ALLA has 362 observations and 6 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1144
+1145  proc sort data = backward_allA out = backwardA1_sortd; by dxtype1; run;
+
+NOTE: There were 362 observations read from the data set WORK.BACKWARD_ALLA.
+NOTE: The data set WORK.BACKWARDA1_SORTD has 362 observations and 6 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+
+
+1146  proc sort data = backward_allA out = backwardA2_sortd; by dxtype2; run;
+
+NOTE: There were 362 observations read from the data set WORK.BACKWARD_ALLA.
+NOTE: The data set WORK.BACKWARDA2_SORTD has 362 observations and 6 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+
+
+1147  data backward1_names;
+1148      set backwardA1_sortd (rename = (dxty1 = dxty));
+1149      by dxtype1;
+1150      if first.dxtype1;
+1151
+1152      dxtype = dxtype1;
+1153      keep dxtype dxty;
+1154  run;
+
+NOTE: There were 362 observations read from the data set WORK.BACKWARDA1_SORTD.
+NOTE: The data set WORK.BACKWARD1_NAMES has 61 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1155  data backward2_names;
+1156      set backwardA2_sortd (rename = (dxty2 = dxty));
+1157      by dxtype2;
+1158      if first.dxtype2;
+1159      dxtype = dxtype2;
+1160      keep dxtype dxty;
+1161  run;
+
+NOTE: There were 362 observations read from the data set WORK.BACKWARDA2_SORTD.
+NOTE: The data set WORK.BACKWARD2_NAMES has 66 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1162  data backward_names;
+1163      set backward1_names backward2_names;
+1164  run;
+
+NOTE: There were 61 observations read from the data set WORK.BACKWARD1_NAMES.
+NOTE: There were 66 observations read from the data set WORK.BACKWARD2_NAMES.
+NOTE: The data set WORK.BACKWARD_NAMES has 127 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+
+
+1165  proc sort data = backward_names NODUPKEY; by dxtype; run;
+
+NOTE: There were 127 observations read from the data set WORK.BACKWARD_NAMES.
+NOTE: 55 observations with duplicate key values were deleted.
+NOTE: The data set WORK.BACKWARD_NAMES has 72 observations and 2 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+
+
+
+1166
+1167  proc export data = backward_allA
+1168      outfile =
+1168! 'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\ba
+1168! ckwardAll_June2019.csv'
+1169      dbms = csv replace;
+1170  run;
+
+1171   /**********************************************************************
+1172   *   PRODUCT:   SAS
+1173   *   VERSION:   9.4
+1174   *   CREATOR:   External File Interface
+1175   *   DATE:      17MAR25
+1176   *   DESC:      Generated SAS Datastep Code
+1177   *   TEMPLATE SOURCE:  (None Specified.)
+1178   ***********************************************************************/
+1179      data _null_;
+1180      %let _EFIERR_ = 0; /* set the ERROR detection macro variable */
+1181      %let _EFIREC_ = 0;     /* clear export record count macro variable */
+1182      file
+1182! 'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\ba
+1182! ckwardAll_June2019.csv' delimiter=',' DSD DROPOVER lrecl=32767;
+1183      if _n_ = 1 then        /* write column names or labels */
+1184       do;
+1185         put
+1186            "phase"
+1187         ','
+1188            "dxtype1"
+1189         ','
+1190            "dxtype2"
+1191         ','
+1192            "Frequency"
+1193         ','
+1194            "dxty1"
+1195         ','
+1196            "dxty2"
+1197         ;
+1198       end;
+1199     set  BACKWARD_ALLA   end=EFIEOD;
+1200         format phase best12. ;
+1201         format dxtype1 best12. ;
+1202         format dxtype2 best12. ;
+1203         format Frequency best7. ;
+1204         format dxty1 $15. ;
+1205         format dxty2 $15. ;
+1206       do;
+1207         EFIOUT + 1;
+1208         put phase @;
+1209         put dxtype1 @;
+1210         put dxtype2 @;
+1211         put Frequency @;
+1212         put dxty1 $ @;
+1213         put dxty2 $ ;
+1214         ;
+1215       end;
+1216      if _ERROR_ then call symputx('_EFIERR_',1);  /* set ERROR detection macro variable */
+1217      if EFIEOD then call symputx('_EFIREC_',EFIOUT);
+1218      run;
+
+NOTE: The file
+      'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\ba
+      ckwardAll_June2019.csv' is:
+
+      Filename=C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_
+      Mar25\backwardAll_June2019.csv,
+      RECFM=V,LRECL=32767,File Size (bytes)=0,
+      Last Modified=17Mar2025:15:34:53,
+      Create Time=17Mar2025:15:34:53
+
+NOTE: 363 records were written to the file
+      'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\ba
+      ckwardAll_June2019.csv'.
+      The minimum record length was 16.
+      The maximum record length was 43.
+NOTE: There were 362 observations read from the data set WORK.BACKWARD_ALLA.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+
+
+362 records created in
+C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\backwardA
+ll_June2019.csv from BACKWARD_ALLA.
+
+
+NOTE: "C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\ba
+      ckwardAll_June2019.csv" file was successfully created.
+NOTE: PROCEDURE EXPORT used (Total process time):
+      real time           0.18 seconds
+      cpu time            0.03 seconds
+
+
+1219  proc export data = backward_names
+1220      outfile =
+1220! 'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\ba
+1220! ckwardNames_June2019.csv'
+1221      dbms = csv replace;
+1222  run;
+
+1223   /**********************************************************************
+1224   *   PRODUCT:   SAS
+1225   *   VERSION:   9.4
+1226   *   CREATOR:   External File Interface
+1227   *   DATE:      17MAR25
+1228   *   DESC:      Generated SAS Datastep Code
+1229   *   TEMPLATE SOURCE:  (None Specified.)
+1230   ***********************************************************************/
+1231      data _null_;
+1232      %let _EFIERR_ = 0; /* set the ERROR detection macro variable */
+1233      %let _EFIREC_ = 0;     /* clear export record count macro variable */
+1234      file
+1234! 'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\ba
+1234! ckwardNames_June2019.csv' delimiter=',' DSD DROPOVER lrecl=32767;
+1235      if _n_ = 1 then        /* write column names or labels */
+1236       do;
+1237         put
+1238            "dxty"
+1239         ','
+1240            "dxtype"
+1241         ;
+1242       end;
+1243     set  BACKWARD_NAMES   end=EFIEOD;
+1244         format dxty $15. ;
+1245         format dxtype best12. ;
+1246       do;
+1247         EFIOUT + 1;
+1248         put dxty $ @;
+1249         put dxtype ;
+1250         ;
+1251       end;
+1252      if _ERROR_ then call symputx('_EFIERR_',1);  /* set ERROR detection macro variable */
+1253      if EFIEOD then call symputx('_EFIREC_',EFIOUT);
+1254      run;
+
+NOTE: The file
+      'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\ba
+      ckwardNames_June2019.csv' is:
+
+      Filename=C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_
+      Mar25\backwardNames_June2019.csv,
+      RECFM=V,LRECL=32767,File Size (bytes)=0,
+      Last Modified=17Mar2025:15:34:53,
+      Create Time=17Mar2025:15:34:53
+
+NOTE: 73 records were written to the file
+      'C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\ba
+      ckwardNames_June2019.csv'.
+      The minimum record length was 5.
+      The maximum record length was 14.
+NOTE: There were 72 observations read from the data set WORK.BACKWARD_NAMES.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+72 records created in
+C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\backwardN
+ames_June2019.csv from BACKWARD_NAMES.
+
+
+NOTE: "C:\Users\rh93\Box\Duke_DPPPlab\Renate2015\2024_ThreeReasons\Dunedin\Dunedin_Output_Mar25\ba
+      ckwardNames_June2019.csv" file was successfully created.
+NOTE: PROCEDURE EXPORT used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.01 seconds
+
+
+
+1255
+1256  * Figure S7 ... Venn Diagrams/concurrent comorbidity;
+1257  proc freq data = MH_1;
+1258      table anyint15*anyext15 / list missing;
+
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1259  proc freq data = MH_1;
+1260      table anyint18*anyext18*anythd18 / list missing;
+
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+
+
+1261  proc freq data = MH_1;
+1262      table anyint21*anyext21*anythd21 / list missing;
+
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1263  proc freq data = MH_1;
+1264      table anyint26*anyext26*anythd26 / list missing;
+
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1265  proc freq data = MH_1;
+1266      table anyint32*anyext32*anythd32 / list missing;
+
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1267  proc freq data = MH_1;
+1268      table anyint38*anyext38*anythd38 / list missing;
+
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1269  proc freq data = MH_1;
+1270      table anyint45*anyext45*anythd45 / list missing;
+1271  run;
+
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1272
+1273  * Table S1 ... OR's for concurrent comorbidity;
+1274  * Age 15;
+1275  proc logistic data = MH_1 descending;
+1276      model anyint15 = anyext15;
+1277  run;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint15=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.00 seconds
+
+
+1278  * Age 18;
+1279  proc logistic data = MH_1 descending;
+1280      model anyint18 = anyext18;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint18=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1281  proc logistic data = MH_1 descending;
+1282      model anyint18 = anythd18;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint18=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+
+
+1283  proc logistic data = MH_1 descending;
+1284      model anyext18 = anythd18;
+1285  run;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyext18=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1286  * Age 21;
+1287  proc logistic data = MH_1 descending;
+1288      model anyint21 = anyext21;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint21=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.03 seconds
+
+
+1289  proc logistic data = MH_1 descending;
+1290      model anyint21 = anythd21;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint21=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.00 seconds
+
+
+1291  proc logistic data = MH_1 descending;
+1292      model anyext21 = anythd21;
+1293  run;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyext21=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1294  * Age 26;
+1295  proc logistic data = MH_1 descending;
+1296      model anyint26 = anyext26;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint26=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1297  proc logistic data = MH_1 descending;
+1298      model anyint26 = anythd26;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint26=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+
+
+1299  proc logistic data = MH_1 descending;
+1300      model anyext26 = anythd26;
+1301  run;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyext26=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1302  * Age 32;
+1303  proc logistic data = MH_1 descending;
+1304      model anyint32 = anyext32;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint32=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+
+
+1305  proc logistic data = MH_1 descending;
+1306      model anyint32 = anythd32;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint32=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1307  proc logistic data = MH_1 descending;
+1308      model anyext32 = anythd32;
+1309  run;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyext32=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1310  * Age 38;
+1311  proc logistic data = MH_1 descending;
+1312      model anyint38 = anyext38;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint38=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.00 seconds
+
+
+1313  proc logistic data = MH_1 descending;
+1314      model anyint38 = anythd38;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint38=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1315  proc logistic data = MH_1 descending;
+1316      model anyext38 = anythd38;
+1317  run;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyext38=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1318  * Age 45;
+1319  proc logistic data = MH_1 descending;
+1320      model anyint45 = anyext45;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint45=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1321  proc logistic data = MH_1 descending;
+1322      model anyint45 = anythd45;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyint45=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1323  proc logistic data = MH_1 descending;
+1324      model anyext45 = anythd45;
+1325  run;
+
+NOTE: PROC LOGISTIC is modeling the probability that anyext45=1.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+1326
+1327  * Figure S8 ... Sequential Comorbidity;
+1328  * Flip data to allow cross time estimates;
+1329  data crosstime;
+1330      set MH_1;
+1331
+1332      age15 = 1; age18 = 2; age21 = 3; age26 = 4; age32 = 5; age38 = 6;
+1333      null  = .;
+1334
+1335      array ph   [6] age15      age18      age21      age26      age32      age38;
+1336      array in1  [6] anyint15   anyint18   anyint21   anyint26   anyint32   anyint38;
+1337      array in2  [6] firstint15 firstint18 firstint21 firstint26 firstint32 firstint38;
+1338      array in3  [6] anyext15   anyext18   anyext21   anyext26   anyext32   anyext38;
+1339      array in4  [6] firstext15 firstext18 firstext21 firstext26 firstext32 firstext38;
+1340      array in5  [6] null       anythd18   anythd21   anythd26   anythd32   anythd38;
+1341      array in6  [6] null       firstthd18 firstthd21 firstthd26 firstthd32 firstthd38;
+1342
+1343      array out1 [6] anyint1845 anyint2145 anyint2645 anyint3245 anyint3845 anyint45;
+1344      array out2 [6] anyext1845 anyext2145 anyext2645 anyext3245 anyext3845 anyext45;
+1345      array out3 [6] anythd1845 anythd2145 anythd2645 anythd3245 anythd3845 anythd45;
+1346
+1347      do i = 1 to 6;
+1348          phase    = ph[i];
+1349
+1350          anyint   = in1[i];
+1351          firstint = in2[i];
+1352          anyext   = in3[i];
+1353          firstext = in4[i];
+1354          anythd   = in5[i];
+1355          firstthd = in6[i];
+1356
+1357          laterint = out1[i];
+1358          laterext = out2[i];
+1359          laterthd = out3[i];
+1360          output;
+1361      end;
+1362
+1363      keep snum phase anyint firstint anyext firstext anythd firstthd laterint laterext
+1363! laterthd;
+1364  run;
+
+NOTE: There were 1037 observations read from the data set WORK.MH_1.
+NOTE: The data set WORK.CROSSTIME has 6222 observations and 11 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+1365
+1366  proc freq data = crosstime;
+1367      table phase*laterint*anyint / list missing;
+1368      table phase*laterext*anyint / list missing;
+1369      table phase*laterthd*anyint / list missing;
+1370
+1371      table phase*laterint*anyext / list missing;
+1372      table phase*laterext*anyext / list missing;
+1373      table phase*laterthd*anyext / list missing;
+1374
+1375      table phase*laterint*anythd / list missing;
+1376      table phase*laterext*anythd / list missing;
+1377      table phase*laterthd*anythd / list missing;
+1378  run;
+
+NOTE: There were 6222 observations read from the data set WORK.CROSSTIME.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.09 seconds
+      cpu time            0.04 seconds
+
+
+1379
+1380  proc genmod data = crosstime;
+1381      class snum phase;
+1382      model laterint = anyint phase anyint*phase / dist = poisson link = log;
+1383      estimate 'RR' anyint 1 / exp;
+1384      repeated subject = snum(phase) / type = unstr;
+
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: Algorithm converged.
+NOTE: Algorithm converged.
+NOTE: The empirical covariance matrix estimate is used in the ESTIMATE statement.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           0.09 seconds
+      cpu time            0.01 seconds
+
+
+1385  proc genmod data = crosstime;
+1386      class snum phase;
+1387      model laterext = anyint phase anyint*phase / dist = poisson link = log;
+1388      estimate 'RR' anyint 1 / exp;
+1389      repeated subject = snum(phase) / type = unstr;
+
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: Algorithm converged.
+NOTE: Algorithm converged.
+NOTE: The empirical covariance matrix estimate is used in the ESTIMATE statement.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.01 seconds
+
+
+1390  proc genmod data = crosstime;
+1391      class snum phase;
+1392      model laterthd = anyint phase anyint*phase / dist = poisson link = log;
+1393      estimate 'RR' anyint 1 / exp;
+1394      repeated subject = snum(phase) / type = unstr;
+1395  run;
+
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: Algorithm converged.
+NOTE: Algorithm converged.
+NOTE: The empirical covariance matrix estimate is used in the ESTIMATE statement.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.03 seconds
+
+
+1396
+1397  proc genmod data = crosstime;
+1398      class snum phase;
+1399      model laterint = anyext phase anyext*phase / dist = poisson link = log;
+1400      estimate 'RR' anyext 1 / exp;
+1401      repeated subject = snum(phase) / type = unstr;
+
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: Algorithm converged.
+NOTE: Algorithm converged.
+NOTE: The empirical covariance matrix estimate is used in the ESTIMATE statement.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.01 seconds
+
+
+1402  proc genmod data = crosstime;
+1403      class snum phase;
+1404      model laterext = anyext phase anyext*phase / dist = poisson link = log;
+1405      estimate 'RR' anyext 1 / exp;
+1406      repeated subject = snum(phase) / type = unstr;
+
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: Algorithm converged.
+NOTE: Algorithm converged.
+NOTE: The empirical covariance matrix estimate is used in the ESTIMATE statement.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.01 seconds
+
+
+1407  proc genmod data = crosstime;
+1408      class snum phase;
+1409      model laterthd = anyext phase anyext*phase / dist = poisson link = log;
+1410      estimate 'RR' anyext 1 / exp;
+1411      repeated subject = snum(phase) / type = unstr;
+1412  run;
+
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: Algorithm converged.
+NOTE: Algorithm converged.
+NOTE: The empirical covariance matrix estimate is used in the ESTIMATE statement.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.03 seconds
+
+
+1413
+1414  proc genmod data = crosstime;
+1415      class snum phase;
+1416      model laterint = anythd phase anythd*phase / dist = poisson link = log;
+1417      estimate 'RR' anythd 1 / exp;
+1418      repeated subject = snum(phase) / type = unstr;
+
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: Algorithm converged.
+NOTE: Algorithm converged.
+NOTE: The empirical covariance matrix estimate is used in the ESTIMATE statement.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           0.05 seconds
+      cpu time            0.03 seconds
+
+
+1419  proc genmod data = crosstime;
+1420      class snum phase;
+1421      model laterext = anythd phase anythd*phase / dist = poisson link = log;
+1422      estimate 'RR' anythd 1 / exp;
+1423      repeated subject = snum(phase) / type = unstr;
+
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: Algorithm converged.
+NOTE: Algorithm converged.
+NOTE: The empirical covariance matrix estimate is used in the ESTIMATE statement.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.01 seconds
+
+
+1424  proc genmod data = crosstime;
+1425      class snum phase;
+1426      model laterthd = anythd phase anythd*phase / dist = poisson link = log;
+1427      estimate 'RR' anythd 1 / exp;
+1428      repeated subject = snum(phase) / type = unstr;
+1429  run;
+
+NOTE: Class levels for some variables were not printed due to excessive size.
+NOTE: Algorithm converged.
+NOTE: Algorithm converged.
+NOTE: The empirical covariance matrix estimate is used in the ESTIMATE statement.
+NOTE: PROCEDURE GENMOD used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.00 seconds
+
+
