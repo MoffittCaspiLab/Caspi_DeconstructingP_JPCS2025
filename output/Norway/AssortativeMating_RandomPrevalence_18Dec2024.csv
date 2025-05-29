@@ -1,0 +1,31 @@
+who,code,all_n,all_p
+random_f,Any Mental Health Disorder,458195,0.649902627
+random_f,Substance abuse,33705,0.0478070866
+random_f,ADHD,11066,0.0156959864
+random_f,Depression,228766,0.3244811147
+random_f,Acute stress reaction,223751,0.3173678515
+random_f,Anxiety disorder,113833,0.1614604388
+random_f,Phobia/Compulsive disorder,22609,0.0320685483
+random_f,PTSD,18032,0.0255765431
+random_f,Somatization,8899,0.0126223191
+random_f,Psychosis,16833,0.0238758845
+random_f,"Psychological disorders, NOS",177574,0.2518705117
+random_f,Sleep disturbance,144239,0.2045882321
+random_f,Sexual concern,1981,0.0028098454
+random_f,Personality disorder,9026,0.0128024555
+random_f,Suicide/Suicide attempt,5832,0.008272094
+random_m,Any Mental Health Disorder,309037,0.4558861277
+random_m,Substance abuse,37994,0.0560481028
+random_m,ADHD,9010,0.0132913988
+random_m,Depression,122856,0.1812350822
+random_m,Acute stress reaction,107127,0.1580319289
+random_m,Anxiety disorder,56541,0.0834083218
+random_m,Phobia/Compulsive disorder,12197,0.017992807
+random_m,PTSD,6136,0.0090517229
+random_m,Somatization,4164,0.006142662
+random_m,Psychosis,10718,0.0158110114
+random_m,"Psychological disorders, NOS",88403,0.1304106024
+random_m,Sleep disturbance,97754,0.1442050386
+random_m,Sexual concern,35420,0.0522509817
+random_m,Personality disorder,5967,0.0088024169
+random_m,Suicide/Suicide attempt,5430,0.0080102437
