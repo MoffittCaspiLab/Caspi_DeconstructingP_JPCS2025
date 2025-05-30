@@ -1,0 +1,166 @@
+who,code,all_n,all_p
+focal_mf_al,Any Mental Health Disorder,934781,0.5706321155
+focal_mf_al,Substance abuse,110256,0.0673051918
+focal_mf_al,ADHD,30569,0.0186606843
+focal_mf_al,Depression,439742,0.2684381772
+focal_mf_al,Acute stress reaction,390647,0.2384683942
+focal_mf_al,Anxiety disorder,224617,0.1371162592
+focal_mf_al,Phobia/Compulsive disorder,49826,0.0304160181
+focal_mf_al,PTSD,31120,0.0189970393
+focal_mf_al,Somatization,16677,0.0101803864
+focal_mf_al,Psychosis,50139,0.0306070873
+focal_mf_al,"Psychological disorders, NOS",330222,0.2015822727
+focal_mf_al,Sleep disturbance,300135,0.1832158227
+focal_mf_al,Sexual concern,43742,0.0267020725
+focal_mf_al,Personality disorder,26764,0.0163379422
+focal_mf_al,Suicide/Suicide attempt,18378,0.0112187529
+focal_f_all,Any Mental Health Disorder,531727,0.6569348386
+focal_f_all,Substance abuse,43603,0.0538703691
+focal_f_all,ADHD,13661,0.0168778092
+focal_f_all,Depression,270289,0.3339350091
+focal_f_all,Acute stress reaction,254484,0.3144083439
+focal_f_all,Anxiety disorder,136773,0.1689794738
+focal_f_all,Phobia/Compulsive disorder,27487,0.0339594715
+focal_f_all,PTSD,22172,0.0273929277
+focal_f_all,Somatization,10820,0.0133678278
+focal_f_all,Psychosis,24686,0.0304989091
+focal_f_all,"Psychological disorders, NOS",207754,0.2566746478
+focal_f_all,Sleep disturbance,171398,0.2117577582
+focal_f_all,Sexual concern,2254,0.0027847582
+focal_f_all,Personality disorder,13019,0.0160846349
+focal_f_all,Suicide/Suicide attempt,7904,0.0097651858
+focal_m_all,Any Mental Health Disorder,403054,0.4863431892
+focal_m_all,Substance abuse,66653,0.080426525
+focal_m_all,ADHD,16908,0.0204019577
+focal_m_all,Depression,169453,0.2044696553
+focal_m_all,Acute stress reaction,136163,0.1643004354
+focal_m_all,Anxiety disorder,87844,0.1059965442
+focal_m_all,Phobia/Compulsive disorder,22339,0.0269552479
+focal_m_all,PTSD,8948,0.0107970616
+focal_m_all,Somatization,5857,0.0070673212
+focal_m_all,Psychosis,25453,0.0307127412
+focal_m_all,"Psychological disorders, NOS",122468,0.1477754288
+focal_m_all,Sleep disturbance,128737,0.1553398878
+focal_m_all,Sexual concern,41488,0.0500612976
+focal_m_all,Personality disorder,13745,0.0165853388
+focal_m_all,Suicide/Suicide attempt,10474,0.0126384022
+focal_mf_al,Any Mental Health Disorder,785030,0.5613467804
+focal_mf_al,Substance abuse,78383,0.0560488703
+focal_mf_al,ADHD,23344,0.0166924566
+focal_mf_al,Depression,362870,0.2594753146
+focal_mf_al,Acute stress reaction,341840,0.2444375163
+focal_mf_al,Anxiety disorder,178085,0.1273421925
+focal_mf_al,Phobia/Compulsive disorder,37747,0.0269915251
+focal_mf_al,PTSD,24861,0.0177772089
+focal_mf_al,Somatization,13463,0.0096269081
+focal_mf_al,Psychosis,30059,0.0214941122
+focal_mf_al,"Psychological disorders, NOS",275130,0.1967355893
+focal_mf_al,Sleep disturbance,247093,0.1766873368
+focal_mf_al,Sexual concern,36971,0.0264366353
+focal_mf_al,Personality disorder,17036,0.0121818322
+focal_mf_al,Suicide/Suicide attempt,12827,0.0091721274
+focal_f,Any Mental Health Disorder,436843,0.6444233657
+focal_f,Substance abuse,31302,0.0461761782
+focal_f,ADHD,10148,0.014970157
+focal_f,Depression,215931,0.3185377396
+focal_f,Acute stress reaction,212088,0.3128686114
+focal_f,Anxiety disorder,107611,0.1587459174
+focal_f,Phobia/Compulsive disorder,21387,0.0315497387
+focal_f,PTSD,16680,0.0246060524
+focal_f,Somatization,8432,0.012438743
+focal_f,Psychosis,15624,0.0230482591
+focal_f,"Psychological disorders, NOS",168423,0.2484547458
+focal_f,Sleep disturbance,136660,0.2015985083
+focal_f,Sexual concern,1876,0.0027674433
+focal_f,Personality disorder,8252,0.0121732101
+focal_f,Suicide/Suicide attempt,5302,0.0078214202
+focal_m,Any Mental Health Disorder,309024,0.464516129
+focal_m,Substance abuse,40688,0.0611610498
+focal_m,ADHD,11039,0.0165935123
+focal_m,Depression,125167,0.1881474912
+focal_m,Acute stress reaction,111196,0.1671466795
+focal_m,Anxiety disorder,59767,0.0898400625
+focal_m,Phobia/Compulsive disorder,14004,0.0210504164
+focal_m,PTSD,6278,0.0094369119
+focal_m,Somatization,4301,0.0064651414
+focal_m,Psychosis,11976,0.0180019842
+focal_m,"Psychological disorders, NOS",91710,0.1378558759
+focal_m,Sleep disturbance,96743,0.145421339
+focal_m,Sexual concern,32671,0.0491101224
+focal_m,Personality disorder,7196,0.0108168235
+focal_m,Suicide/Suicide attempt,6240,0.0093797914
+primary_mf_,Any Mental Health Disorder,737511,0.5490938412
+primary_mf_,Substance abuse,68267,0.050826346
+primary_mf_,ADHD,20227,0.015059465
+primary_mf_,Depression,336677,0.2506637422
+primary_mf_,Acute stress reaction,315430,0.2348448638
+primary_mf_,Anxiety disorder,163555,0.1217704457
+primary_mf_,Phobia/Compulsive disorder,34109,0.0253949322
+primary_mf_,PTSD,23368,0.0173980115
+primary_mf_,Somatization,12863,0.0095767983
+primary_mf_,Psychosis,25901,0.0192838881
+primary_mf_,"Psychological disorders, NOS",255120,0.1899426866
+primary_mf_,Sleep disturbance,227602,0.169454905
+primary_mf_,Sexual concern,37369,0.0278220769
+primary_mf_,Personality disorder,14150,0.0105349993
+primary_mf_,Suicide/Suicide attempt,10925,0.0081339129
+primary_f,Any Mental Health Disorder,428474,0.6440699877
+primary_f,Substance abuse,30273,0.0455055166
+primary_f,ADHD,11217,0.0168610769
+primary_f,Depression,213821,0.3214096744
+primary_f,Acute stress reaction,208303,0.313115173
+primary_f,Anxiety disorder,107014,0.1608604155
+primary_f,Phobia/Compulsive disorder,21912,0.0329374981
+primary_f,PTSD,17232,0.0259026546
+primary_f,Somatization,8699,0.0130760906
+primary_f,Psychosis,15183,0.0228226558
+primary_f,"Psychological disorders, NOS",166717,0.250604275
+primary_f,Sleep disturbance,129848,0.1951838379
+primary_f,Sexual concern,1949,0.0029296816
+primary_f,Personality disorder,8183,0.012300454
+primary_f,Suicide/Suicide attempt,5495,0.0082599284
+primary_m,Any Mental Health Disorder,309037,0.4558861277
+primary_m,Substance abuse,37994,0.0560481028
+primary_m,ADHD,9010,0.0132913988
+primary_m,Depression,122856,0.1812350822
+primary_m,Acute stress reaction,107127,0.1580319289
+primary_m,Anxiety disorder,56541,0.0834083218
+primary_m,Phobia/Compulsive disorder,12197,0.017992807
+primary_m,PTSD,6136,0.0090517229
+primary_m,Somatization,4164,0.006142662
+primary_m,Psychosis,10718,0.0158110114
+primary_m,"Psychological disorders, NOS",88403,0.1304106024
+primary_m,Sleep disturbance,97754,0.1442050386
+primary_m,Sexual concern,35420,0.0522509817
+primary_m,Personality disorder,5967,0.0088024169
+primary_m,Suicide/Suicide attempt,5430,0.0080102437
+partnered_f,Any Mental Health Disorder,513887,0.6469561824
+partnered_f,Substance abuse,38341,0.0482692635
+partnered_f,ADHD,13363,0.0168233006
+partnered_f,Depression,258026,0.3248409007
+partnered_f,Acute stress reaction,248167,0.3124289482
+partnered_f,Anxiety disorder,129421,0.1629341005
+partnered_f,Phobia/Compulsive disorder,26155,0.0329277428
+partnered_f,PTSD,20870,0.0262742111
+partnered_f,Somatization,10289,0.0129532994
+partnered_f,Psychosis,19165,0.0241277075
+partnered_f,"Psychological disorders, NOS",198406,0.249782517
+partnered_f,Sleep disturbance,160389,0.2019211522
+partnered_f,Sexual concern,2314,0.0029132019
+partnered_f,Personality disorder,10290,0.0129545583
+partnered_f,Suicide/Suicide attempt,6849,0.0086225238
+partnered_m,Any Mental Health Disorder,369914,0.4663829895
+partnered_m,Substance abuse,49616,0.0625552383
+partnered_m,ADHD,12761,0.0160889107
+partnered_m,Depression,150224,0.1894005585
+partnered_m,Acute stress reaction,129006,0.1626491669
+partnered_m,Anxiety disorder,71301,0.0898954177
+partnered_m,Phobia/Compulsive disorder,16206,0.0204323241
+partnered_m,PTSD,7795,0.0098278395
+partnered_m,Somatization,5102,0.0064325384
+partnered_m,Psychosis,14467,0.0182398144
+partnered_m,"Psychological disorders, NOS",107416,0.1354287623
+partnered_m,Sleep disturbance,117568,0.1482282782
+partnered_m,Sexual concern,41725,0.0526063632
+partnered_m,Personality disorder,8382,0.0105679218
+partnered_m,Suicide/Suicide attempt,7428,0.0093651304
